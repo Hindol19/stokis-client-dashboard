@@ -58,7 +58,7 @@ export default function NewsFilter({
             <SelectValue placeholder="Filter by company" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Companies</SelectItem>
+            <SelectItem value="all_companies">All Companies</SelectItem>
             {stockList.map((stock) => (
               <SelectItem key={stock.ticker} value={stock.ticker}>
                 {stock.companyName} ({stock.ticker})
@@ -77,7 +77,7 @@ export default function NewsFilter({
             <SelectValue placeholder="Filter by impact" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Impacts</SelectItem>
+            <SelectItem value="all_impacts">All Impacts</SelectItem>
             <SelectItem value="positive">Positive Impact</SelectItem>
             <SelectItem value="negative">Negative Impact</SelectItem>
             <SelectItem value="neutral">Neutral Impact</SelectItem>

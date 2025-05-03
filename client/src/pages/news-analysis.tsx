@@ -7,8 +7,8 @@ import { getFilteredNews, NewsItem } from '@/data/news';
 
 export default function NewsAnalysis() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [companyFilter, setCompanyFilter] = useState('');
-  const [impactFilter, setImpactFilter] = useState('');
+  const [companyFilter, setCompanyFilter] = useState('all_companies');
+  const [impactFilter, setImpactFilter] = useState('all_impacts');
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   
   useEffect(() => {

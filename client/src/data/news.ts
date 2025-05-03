@@ -109,9 +109,9 @@ export function getFilteredNews(
       item.title.toLowerCase().includes(search.toLowerCase()) || 
       item.content.toLowerCase().includes(search.toLowerCase());
     
-    const matchesCompany = company === '' || item.ticker === company;
+    const matchesCompany = company === '' || company === 'all_companies' || item.ticker === company;
     
-    const matchesImpact = impact === '' || 
+    const matchesImpact = impact === '' || impact === 'all_impacts' || 
       (impact === 'positive' && item.impact === 'positive') ||
       (impact === 'negative' && item.impact === 'negative') ||
       (impact === 'neutral' && item.impact === 'neutral');

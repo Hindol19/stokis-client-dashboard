@@ -22,11 +22,9 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         animate={{ opacity: 1, x: 0 }} 
         transition={{ duration: 0.2 }}
       >
-        <Link href={href}>
-          <a className={`flex items-center p-2 text-base font-medium rounded-lg ${isActive ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} group transition-colors duration-200`}>
+        <Link href={href} className={`flex items-center p-2 text-base font-medium rounded-lg ${isActive ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} group transition-colors duration-200`}>
             <Icon className={`w-6 h-6 ${isActive ? 'text-white' : 'text-gray-400'} transition duration-75 group-hover:text-white`} />
             {!collapsed && <span className="ml-3">{text}</span>}
-          </a>
         </Link>
       </motion.li>
     );
