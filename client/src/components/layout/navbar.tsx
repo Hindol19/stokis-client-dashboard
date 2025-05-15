@@ -27,7 +27,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   };
 
   return (
-    <header className="bg-gradient-to-r from-blue-900/80 via-indigo-900/70 to-purple-900/80 border-b border-blue-800/50 shadow-md">
+    <header className="fixed top-0 z-50 w-[60%] bg-gradient-to-r from-blue-900/80 via-indigo-900/70 to-purple-900/80 border-b border-blue-800/50 shadow-md rounded-full m-4 backdrop-blur-sm">
       <div className="flex items-center justify-between h-16 px-4">
         {/* Left side: Date and toggle button */}
         <div className="flex items-center">
