@@ -26,26 +26,28 @@ export default function StockChart({
   onTogglePrediction 
 }: StockChartProps) {
   // Prepare data for the chart
-  const chartData = stockData.actualData.map((item, index) => {
-    const predictionPoint = stockData.predictedData[index - stockData.actualData.length + stockData.predictedData.length];
+  const chartData = stockData?.actualData ? stockData.actualData.map((item, index) => {
+    const predictionPoint = stockData?.predictedData?.[index - stockData?.actualData.length + stockData?.predictedData?.length];
     
     return {
-      date: item.date,
-      actual: item.price,
-      predicted: predictionPoint ? predictionPoint.price : null
+      date: item["Date"],
+      actual: item["Close"],
+      predicted: predictionPoint ? predictionPoint["Close"] : null
     };
-  });
+  }) : [];
   
   // Add prediction-only data points
-  stockData.predictedData.slice(0).forEach(point => {
-    if (!chartData.find(dataPoint => dataPoint.date === point.date)) {
-      chartData.push({
-        date: point.date,
-        actual: null,
-        predicted: point.price
-      });
-    }
-  });
+  if (stockData?.predictedData?.length) {
+    stockData.predictedData.slice(0).forEach(point => {
+      if (!chartData.find(dataPoint => dataPoint.date === point["Date"])) {
+        chartData.push({
+          date: point["Date"],
+          actual: 0,
+          predicted: point["Close"]
+        });
+      }
+    });
+  }
   
   // Custom tooltip component
   const CustomTooltip = ({ active, payload, label }: any) => {

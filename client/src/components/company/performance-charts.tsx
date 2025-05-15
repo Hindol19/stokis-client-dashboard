@@ -12,6 +12,7 @@ import {
   Tooltip, 
   ResponsiveContainer
 } from 'recharts';
+// import { getStockData } from '@/lib/utilityFunctions';
 import { getStockData } from '@/data/stocks';
 
 interface PerformanceChartsProps {
@@ -22,13 +23,13 @@ export default function PerformanceCharts({ ticker }: PerformanceChartsProps) {
   // Generate dummy data for performance charts
   const stockData = getStockData(ticker);
   const priceHistoryData = stockData.actualData.map(item => ({
-    date: item.date,
-    price: item.price
+    date: item.Date,
+    price: item.Close
   }));
   
   // Volume data (random)
   const volumeData = stockData.actualData.map(item => ({
-    date: item.date,
+    date: item.Date,
     volume: Math.floor(Math.random() * 50) + 20
   }));
 

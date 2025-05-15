@@ -43,7 +43,7 @@ export default function CompanySelector({
             <SelectContent>
               {stockList.map((stock: Stock) => (
                 <SelectItem key={stock.ticker} value={stock.ticker}>
-                  {stock.companyName} ({stock.ticker})
+                  {stock.companyName} ({stock.ticker?.split('.')[0]})
                 </SelectItem>
               ))}
             </SelectContent>

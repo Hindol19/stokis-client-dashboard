@@ -1,19 +1,19 @@
 export interface Stock {
   ticker: string;
   companyName: string;
-  currentPrice: number;
-  change: number;
-  changePercent: number;
-  marketCap: number;
-  high52Week: number;
-  low52Week: number;
-  volume: number;
-  avgVolume: number;
+  currentPrice?: number;
+  change?: number;
+  changePercent?: number;
+  marketCap?: number;
+  high52Week?: number;
+  low52Week?: number;
+  volume?: number;
+  avgVolume?: number;
 }
 
 export interface StockPricePoint {
-  date: string;
-  price: number;
+  Date: string;
+  Close: number;
 }
 
 export interface StockPrediction {
@@ -29,229 +29,553 @@ export interface PredictionComparison {
   date: string;
 }
 
-export const stockList: Stock[] = [
+// export const stockList: Stock[] = [
+//   {
+//     ticker: 'AAPL',
+//     companyName: 'Apple Inc.',
+//     currentPrice: 182.63,
+//     change: 2.26,
+//     changePercent: 1.25,
+//     marketCap: 2850000000000,
+//     high52Week: 198.23,
+//     low52Week: 124.17,
+//     volume: 54300000,
+//     avgVolume: 62500000
+//   },
+//   {
+//     ticker: 'MSFT',
+//     companyName: 'Microsoft Corporation',
+//     currentPrice: 372.45,
+//     change: 4.76,
+//     changePercent: 1.29,
+//     marketCap: 2760000000000,
+//     high52Week: 385.74,
+//     low52Week: 275.37,
+//     volume: 25400000,
+//     avgVolume: 28700000
+//   },
+//   {
+//     ticker: 'GOOGL',
+//     companyName: 'Alphabet Inc.',
+//     currentPrice: 142.38,
+//     change: 1.52,
+//     changePercent: 1.08,
+//     marketCap: 1790000000000,
+//     high52Week: 153.78,
+//     low52Week: 102.63,
+//     volume: 21800000,
+//     avgVolume: 24500000
+//   },
+//   {
+//     ticker: 'AMZN',
+//     companyName: 'Amazon.com Inc.',
+//     currentPrice: 145.24,
+//     change: 2.18,
+//     changePercent: 1.52,
+//     marketCap: 1500000000000,
+//     high52Week: 150.34,
+//     low52Week: 101.15,
+//     volume: 32600000,
+//     avgVolume: 38900000
+//   },
+//   {
+//     ticker: 'META',
+//     companyName: 'Meta Platforms Inc.',
+//     currentPrice: 324.82,
+//     change: -17.85,
+//     changePercent: -5.2,
+//     marketCap: 832000000000,
+//     high52Week: 377.06,
+//     low52Week: 197.16,
+//     volume: 19700000,
+//     avgVolume: 16400000
+//   },
+//   {
+//     ticker: 'TSLA',
+//     companyName: 'Tesla Inc.',
+//     currentPrice: 246.53,
+//     change: 9.91,
+//     changePercent: 4.2,
+//     marketCap: 782000000000,
+//     high52Week: 278.98,
+//     low52Week: 152.37,
+//     volume: 47200000,
+//     avgVolume: 51800000
+//   },
+//   {
+//     ticker: 'NVDA',
+//     companyName: 'NVIDIA Corporation',
+//     currentPrice: 487.21,
+//     change: 38.12,
+//     changePercent: 8.5,
+//     marketCap: 1200000000000,
+//     high52Week: 505.48,
+//     low52Week: 176.61,
+//     volume: 36400000,
+//     avgVolume: 42100000
+//   }
+// ];
+
+export const stockList = [
   {
-    ticker: 'AAPL',
-    companyName: 'Apple Inc.',
-    currentPrice: 182.63,
-    change: 2.26,
-    changePercent: 1.25,
-    marketCap: 2850000000000,
-    high52Week: 198.23,
-    low52Week: 124.17,
-    volume: 54300000,
-    avgVolume: 62500000
+    ticker: "TATAMOTORS.NS",
+    companyName: "Tata Motors Ltd.",
   },
   {
-    ticker: 'MSFT',
-    companyName: 'Microsoft Corporation',
-    currentPrice: 372.45,
-    change: 4.76,
-    changePercent: 1.29,
-    marketCap: 2760000000000,
-    high52Week: 385.74,
-    low52Week: 275.37,
-    volume: 25400000,
-    avgVolume: 28700000
+    ticker: "MARUTI.NS",
+    companyName: "Maruti Suzuki India Ltd.",
   },
   {
-    ticker: 'GOOGL',
-    companyName: 'Alphabet Inc.',
-    currentPrice: 142.38,
-    change: 1.52,
-    changePercent: 1.08,
-    marketCap: 1790000000000,
-    high52Week: 153.78,
-    low52Week: 102.63,
-    volume: 21800000,
-    avgVolume: 24500000
+    ticker: "EICHERMOT.NS",
+    companyName: "Eicher Motors Ltd.",
   },
   {
-    ticker: 'AMZN',
-    companyName: 'Amazon.com Inc.',
-    currentPrice: 145.24,
-    change: 2.18,
-    changePercent: 1.52,
-    marketCap: 1500000000000,
-    high52Week: 150.34,
-    low52Week: 101.15,
-    volume: 32600000,
-    avgVolume: 38900000
+    ticker: "M&M.NS",
+    companyName: "Mahindra & Mahindra Ltd.",
   },
   {
-    ticker: 'META',
-    companyName: 'Meta Platforms Inc.',
-    currentPrice: 324.82,
-    change: -17.85,
-    changePercent: -5.2,
-    marketCap: 832000000000,
-    high52Week: 377.06,
-    low52Week: 197.16,
-    volume: 19700000,
-    avgVolume: 16400000
+    ticker: "BAJAJ-AUTO.NS",
+    companyName: "Bajaj Auto Ltd.",
   },
   {
-    ticker: 'TSLA',
-    companyName: 'Tesla Inc.',
-    currentPrice: 246.53,
-    change: 9.91,
-    changePercent: 4.2,
-    marketCap: 782000000000,
-    high52Week: 278.98,
-    low52Week: 152.37,
-    volume: 47200000,
-    avgVolume: 51800000
+    ticker: "TVSMOTOR.NS",
+    companyName: "TVS Motor Company Ltd.",
   },
   {
-    ticker: 'NVDA',
-    companyName: 'NVIDIA Corporation',
-    currentPrice: 487.21,
-    change: 38.12,
-    changePercent: 8.5,
-    marketCap: 1200000000000,
-    high52Week: 505.48,
-    low52Week: 176.61,
-    volume: 36400000,
-    avgVolume: 42100000
-  }
+    ticker: "NESTLEIND.NS",
+    companyName: "Nestle India Ltd.",
+  },
+  {
+    ticker: "TATACONSUM.NS",
+    companyName: "Tata Consumer Products Ltd.",
+  },
+  {
+    ticker: "HINDUNILVR.NS",
+    companyName: "Hindustan Unilever Ltd.",
+  },
+  {
+    ticker: "VBL.NS",
+    companyName: "Varun Beverages Ltd.",
+  },
+  {
+    ticker: "COLPAL.NS",
+    companyName: "Colgate-Palmolive (India) Ltd.",
+  },
+  {
+    ticker: "BRITANNIA.NS",
+    companyName: "Britannia Industries Ltd.",
+  },
+  {
+    ticker: "TITAN.NS",
+    companyName: "Titan Company Ltd.",
+  },
+  {
+    ticker: "HDFCBANK.NS",
+    companyName: "HDFC Bank Ltd.",
+  },
+  {
+    ticker: "ICICIBANK.NS",
+    companyName: "ICICI Bank Ltd.",
+  },
+  {
+    ticker: "KOTAKBANK.NS",
+    companyName: "Kotak Mahindra Bank Ltd.",
+  },
+  {
+    ticker: "AXISBANK.NS",
+    companyName: "Axis Bank Ltd.",
+  },
+  {
+    ticker: "INDUSINDBK.NS",
+    companyName: "IndusInd Bank Ltd.",
+  },
+  {
+    ticker: "SBIN.NS",
+    companyName: "State Bank of India",
+  },
+  {
+    ticker: "BANKBARODA.NS",
+    companyName: "Bank of Baroda",
+  },
+  {
+    ticker: "IOB.NS",
+    companyName: "Indian Overseas Bank",
+  },
+  {
+    ticker: "PNB.NS",
+    companyName: "Punjab National Bank",
+  },
+  {
+    ticker: "UNIONBANK.NS",
+    companyName: "Union Bank of India",
+  },
+  {
+    ticker: "ULTRACEMCO.NS",
+    companyName: "UltraTech Cement Ltd.",
+  },
+  {
+    ticker: "SHREECEM.NS",
+    companyName: "Shree Cement Ltd.",
+  },
+  {
+    ticker: "AMBUJACEM.NS",
+    companyName: "Ambuja Cements Ltd.",
+  },
+  {
+    ticker: "JSWSTEEL.NS",
+    companyName: "JSW Steel Ltd.",
+  },
+  {
+    ticker: "TATASTEEL.NS",
+    companyName: "Tata Steel Ltd.",
+  },
+  {
+    ticker: "JSL.NS",
+    companyName: "Jindal Stainless Ltd.",
+  },
+  {
+    ticker: "HINDALCO.NS",
+    companyName: "Hindalco Industries Ltd.",
+  },
+  {
+    ticker: "JINDALSTEL.NS",
+    companyName: "Jindal Steel & Power Ltd.",
+  },
+  {
+    ticker: "HINDZINC.NS",
+    companyName: "Hindustan Zinc Ltd.",
+  },
+  {
+    ticker: "VEDL.NS",
+    companyName: "Vedanta Ltd.",
+  },
+  {
+    ticker: "COALINDIA.NS",
+    companyName: "Coal India Ltd.",
+  },
+  {
+    ticker: "BHARTIARTL.NS",
+    companyName: "Bharti Airtel Ltd.",
+  },
+  {
+    ticker: "DMART.NS",
+    companyName: "Avenue Supermarts Ltd.",
+  },
+  {
+    ticker: "TRENT.NS",
+    companyName: "Trent Ltd.",
+  },
+  {
+    ticker: "DLF.NS",
+    companyName: "DLF Ltd.",
+  },
+  {
+    ticker: "GODREJPROP.NS",
+    companyName: "Godrej Properties Ltd.",
+  },
+  {
+    ticker: "OBEROIRLTY.NS",
+    companyName: "Oberoi Realty Ltd.",
+  },
+  {
+    ticker: "LODHA.NS",
+    companyName: "Macrotech Developers Ltd.",
+  },
+  {
+    ticker: "LT.NS",
+    companyName: "Larsen & Toubro Ltd.",
+  },
+  {
+    ticker: "HAL.NS",
+    companyName: "Hindustan Aeronautics Ltd.",
+  },
+  {
+    ticker: "TCS.NS",
+    companyName: "Tata Consultancy Services Ltd.",
+  },
+  {
+    ticker: "INFY.NS",
+    companyName: "Infosys Ltd.",
+  },
+  {
+    ticker: "HCLTECH.NS",
+    companyName: "HCL Technologies Ltd.",
+  },
+  {
+    ticker: "WIPRO.NS",
+    companyName: "Wipro Ltd.",
+  },
+  {
+    ticker: "TECHM.NS",
+    companyName: "Tech Mahindra Ltd.",
+  },
+  {
+    ticker: "LTIM.NS",
+    companyName: "LTIMindtree Ltd.",
+  },
+  {
+    ticker: "ADANIPORTS.NS",
+    companyName: "Adani Ports and Special Economic Zone Ltd.",
+  },
+  {
+    ticker: "GRASIM.NS",
+    companyName: "Grasim Industries Ltd.",
+  },
+  {
+    ticker: "ITC.NS",
+    companyName: "ITC Ltd.",
+  },
+  {
+    ticker: "SUNPHARMA.NS",
+    companyName: "Sun Pharmaceutical Industries Ltd.",
+  },
+  {
+    ticker: "DIVISLAB.NS",
+    companyName: "Divi's Laboratories Ltd.",
+  },
+  {
+    ticker: "CIPLA.NS",
+    companyName: "Cipla Ltd.",
+  },
+  {
+    ticker: "DRREDDY.NS",
+    companyName: "Dr. Reddy's Laboratories Ltd.",
+  },
+  {
+    ticker: "APOLLOHOSP.NS",
+    companyName: "Apollo Hospitals Enterprise Ltd.",
+  },
+  {
+    ticker: "MANKIND.NS",
+    companyName: "Mankind Pharma Ltd.",
+  },
+  {
+    ticker: "BAJFINANCE.NS",
+    companyName: "Bajaj Finance Ltd.",
+  },
+  {
+    ticker: "LICI.NS",
+    companyName: "Life Insurance Corporation of India",
+  },
+  {
+    ticker: "BAJAJFINSV.NS",
+    companyName: "Bajaj Finserv Ltd.",
+  },
+  {
+    ticker: "JIOFIN.NS",
+    companyName: "Jio Financial Services Ltd.",
+  },
+  {
+    ticker: "HDFCLIFE.NS",
+    companyName: "HDFC Life Insurance Company Ltd.",
+  },
+  {
+    ticker: "SBILIFE.NS",
+    companyName: "SBI Life Insurance Company Ltd.",
+  },
+  {
+    ticker: "CHOLAFIN.NS",
+    companyName: "Cholamandalam Investment and Finance Company Ltd.",
+  },
+  {
+    ticker: "NTPC.NS",
+    companyName: "NTPC Ltd.",
+  },
+  {
+    ticker: "POWERGRID.NS",
+    companyName: "Power Grid Corporation of India Ltd.",
+  },
+  {
+    ticker: "ADANIGREEN.NS",
+    companyName: "Adani Green Energy Ltd.",
+  },
+  {
+    ticker: "SUPREMEIND.NS",
+    companyName: "Supreme Industries Ltd.",
+  },
+  {
+    ticker: "RELIANCE.NS",
+    companyName: "Reliance Industries Ltd.",
+  },
+  {
+    ticker: "ONGC.NS",
+    companyName: "Oil and Natural Gas Corporation Ltd.",
+  },
+  {
+    ticker: "IOC.NS",
+    companyName: "Indian Oil Corporation Ltd.",
+  },
+  {
+    ticker: "POLYCAB.NS",
+    companyName: "Polycab India Ltd.",
+  },
+  {
+    ticker: "HAVELLS.NS",
+    companyName: "Havells India Ltd.",
+  },
+  {
+    ticker: "SIEMENS.NS",
+    companyName: "Siemens Ltd.",
+  },
+  {
+    ticker: "BERGEPAINT.NS",
+    companyName: "Berger Paints India Ltd.",
+  },
+  {
+    ticker: "ASIANPAINT.NS",
+    companyName: "Asian Paints Ltd.",
+  },
+  {
+    ticker: "PIDILITIND.NS",
+    companyName: "Pidilite Industries Ltd.",
+  },
 ];
 
 export const topGainers = [
   {
-    ticker: 'NVDA',
-    companyName: 'NVIDIA Corp.',
+    ticker: "NVDA",
+    companyName: "NVIDIA Corp.",
     price: 487.21,
-    change: 8.5
+    change: 8.5,
   },
   {
-    ticker: 'AMD',
-    companyName: 'Advanced Micro Devices',
+    ticker: "AMD",
+    companyName: "Advanced Micro Devices",
     price: 112.43,
-    change: 5.7
+    change: 5.7,
   },
   {
-    ticker: 'TSLA',
-    companyName: 'Tesla Inc.',
+    ticker: "TSLA",
+    companyName: "Tesla Inc.",
     price: 246.53,
-    change: 4.2
+    change: 4.2,
   },
   {
-    ticker: 'ADBE',
-    companyName: 'Adobe Inc.',
+    ticker: "ADBE",
+    companyName: "Adobe Inc.",
     price: 567.98,
-    change: 3.8
-  }
+    change: 3.8,
+  },
 ];
 
 export const topLosers = [
   {
-    ticker: 'META',
-    companyName: 'Meta Platforms Inc.',
+    ticker: "META",
+    companyName: "Meta Platforms Inc.",
     price: 324.82,
-    change: -5.2
+    change: -5.2,
   },
   {
-    ticker: 'NFLX',
-    companyName: 'Netflix Inc.',
+    ticker: "NFLX",
+    companyName: "Netflix Inc.",
     price: 387.15,
-    change: -4.8
+    change: -4.8,
   },
   {
-    ticker: 'PYPL',
-    companyName: 'PayPal Holdings Inc.',
+    ticker: "PYPL",
+    companyName: "PayPal Holdings Inc.",
     price: 58.73,
-    change: -3.9
+    change: -3.9,
   },
   {
-    ticker: 'INTC',
-    companyName: 'Intel Corporation',
+    ticker: "INTC",
+    companyName: "Intel Corporation",
     price: 31.46,
-    change: -3.2
-  }
+    change: -3.2,
+  },
 ];
 
 export const recentPredictions: PredictionComparison[] = [
   {
-    ticker: 'AAPL',
+    ticker: "AAPL",
     predicted: 180.15,
     actual: 182.63,
     accuracy: 98.6,
-    date: 'Jan 9, 2023'
+    date: "Jan 9, 2023",
   },
   {
-    ticker: 'MSFT',
+    ticker: "MSFT",
     predicted: 372.45,
-    actual: 368.80,
+    actual: 368.8,
     accuracy: 99.0,
-    date: 'Jan 6, 2023'
+    date: "Jan 6, 2023",
   },
   {
-    ticker: 'GOOGL',
+    ticker: "GOOGL",
     predicted: 142.38,
     actual: 135.73,
     accuracy: 95.3,
-    date: 'Jan 5, 2023'
-  }
+    date: "Jan 5, 2023",
+  },
 ];
 
-export function generateStockHistoryData(days: number = 30, startPrice: number = 180): StockPricePoint[] {
+export function generateStockHistoryData(
+  days: number = 30,
+  startPrice: number = 180
+): StockPricePoint[] {
   const data: StockPricePoint[] = [];
   let currentPrice = startPrice;
-  
+
   const today = new Date();
-  
+
   for (let i = days; i >= 0; i--) {
     const date = new Date();
     date.setDate(today.getDate() - i);
-    
+
     // Random price change between -3% and +3%
     const change = currentPrice * (Math.random() * 0.06 - 0.03);
     currentPrice += change;
-    
+
     data.push({
-      date: date.toISOString().split('T')[0],
-      price: parseFloat(currentPrice.toFixed(2))
+      Date: date.toISOString().split("T")[0],
+      Close: parseFloat(currentPrice.toFixed(2)),
     });
   }
-  
+
   return data;
 }
 
-export function generatePredictionData(actualData: StockPricePoint[], predictionDays: number = 10): StockPrediction {
-  const lastActualDate = new Date(actualData[actualData.length - 1].date);
-  const lastActualPrice = actualData[actualData.length - 1].price;
-  
+export function generatePredictionData(
+  actualData: StockPricePoint[],
+  predictionDays: number = 10
+): StockPrediction {
+  const lastActualDate = new Date(actualData[actualData.length - 1].Date);
+  const lastActualPrice = actualData[actualData.length - 1].Close;
+
   const predictedData: StockPricePoint[] = [];
   let predictedPrice = lastActualPrice;
-  
+
   for (let i = 1; i <= predictionDays; i++) {
     const date = new Date(lastActualDate);
     date.setDate(lastActualDate.getDate() + i);
-    
+
     // Random price change with slight upward bias
     const change = predictedPrice * (Math.random() * 0.08 - 0.03);
     predictedPrice += change;
-    
+
     predictedData.push({
-      date: date.toISOString().split('T')[0],
-      price: parseFloat(predictedPrice.toFixed(2))
+      Date: date.toISOString().split("T")[0],
+      Close: parseFloat(predictedPrice.toFixed(2)),
     });
   }
-  
+
   // Create combined data structure with nulls for non-overlapping portions
   return {
     actualData,
-    predictedData
+    predictedData,
   };
 }
 
 export function getStockByTicker(ticker: string): Stock | undefined {
-  return stockList.find(stock => stock.ticker === ticker);
+  return stockList.find((stock) => stock.ticker === ticker);
 }
 
 export function getStockData(ticker: string): StockPrediction {
   const stock = getStockByTicker(ticker);
-  const startPrice = stock ? stock.currentPrice - (stock.currentPrice * 0.1) : 150;
+  if (!stock || stock.currentPrice === undefined) {
+    throw new Error(`Stock data for ticker ${ticker} is unavailable or incomplete.`);
+  }
+  const startPrice = stock.currentPrice - (stock.currentPrice * 0.1);
   
   const actualData = generateStockHistoryData(20, startPrice);
   return generatePredictionData(actualData);
