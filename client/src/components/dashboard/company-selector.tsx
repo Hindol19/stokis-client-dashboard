@@ -49,12 +49,12 @@ export default function CompanySelector({
             </SelectContent>
           </Select>
         </div>
-        <Button 
+        {/* <Button 
           onClick={onAnalyze}
           className="bg-primary hover:bg-primary/90 transition-colors duration-200"
         >
           Analyze
-        </Button>
+        </Button> */}
       </div>
     </motion.div>
   );

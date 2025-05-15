@@ -10,7 +10,7 @@ import { keyMetrics, companyOverviews } from '@/data/companies';
 import { formatCurrency, formatCompactNumber } from '@/lib/utils';
 
 export default function CompanyPerformance() {
-  const [selectedTicker, setSelectedTicker] = useState('AAPL');
+  const [selectedTicker, setSelectedTicker] = useState('TATAMOTORS.NS');
   
   const companyMetrics = keyMetrics[selectedTicker];
   

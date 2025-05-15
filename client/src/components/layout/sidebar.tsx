@@ -13,7 +13,7 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
   const [location] = useLocation();
   const isMobile = useMobile();
 
-  const LinkItem = ({ href, text, Icon }: { href: string; text: string; Icon: React.ElementType }) => {
+  const LinkItem = ({ href, text, Icon, disabled=false }: { href: string; text: string; Icon: React.ElementType; disabled?: boolean }) => {
     const isActive = location === href;
     
     return (
@@ -22,10 +22,17 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         animate={{ opacity: 1, x: 0 }} 
         transition={{ duration: 0.2 }}
       >
-        <Link href={href} className={`flex items-center p-2 text-base font-medium rounded-lg ${isActive ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} group transition-colors duration-200`}>
+        {disabled ? (
+          <div className="text-gray-400  p-2 rounded-lg cursor-not-allowed opacity-70 flex flex-row items-center">
             <Icon className={`w-6 h-6 ${isActive ? 'text-white' : 'text-gray-400'} transition duration-75 group-hover:text-white`} />
             {!collapsed && <span className="ml-3">{text}</span>}
-        </Link>
+          </div>
+        ) : (
+          <Link href={href}  className={`flex items-center p-2 text-base font-medium rounded-lg ${isActive ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} group transition-colors duration-200`}>
+            <Icon className={`w-6 h-6 ${isActive ? 'text-white' : 'text-gray-400'} transition duration-75 group-hover:text-white`} />
+            {!collapsed && <span className="ml-3">{text}</span>}
+          </Link>
+        )}
       </motion.li>
     );
   };
@@ -53,7 +60,7 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
           <div className="p-5 border-b border-gray-700 flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <BarChart3 className="w-8 h-8 text-primary" />
-              {!collapsed && <h1 className="text-xl font-bold text-white">StockInsight</h1>}
+              {!collapsed && <h1 className="text-xl font-bold text-white">Stokis</h1>}
             </div>
             
             <button 
@@ -67,9 +74,10 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto py-4 px-3">
             <motion.ul className="space-y-2">
-              <LinkItem href="/" text="Dashboard" Icon={BarChart3} />
-              <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} />
-              <LinkItem href="/news-analysis" text="News Analysis" Icon={Newspaper} />
+              <LinkItem href="/dashboard" text="Dashboard" Icon={BarChart3} />
+              {/* <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} /> */}
+              <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} disabled={true} />
+              <LinkItem href="/news-analysis" text="News Analysis" Icon={Newspaper} disabled={true} />
             </motion.ul>
           </nav>
           
