@@ -14,12 +14,16 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Logging in with:", email, password);
+    
     const token = await login(email, password);
     if (token) {
       // Assuming login returns a token, you can set it in your auth context
       // and redirect the user to the dashboard or home page
       // For example:
       // setAuthToken(token);
+      console.log("Login successful:", token);
+      
       localStorage.setItem("authToken", token.token); // Store token in local storage
       
       setLocation("/dashboard"); // Redirect to dashboard after successful login

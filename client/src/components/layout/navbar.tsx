@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { formatDate } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
 import { useAuth } from '@/context/auth-provider';
+import { useLocation } from 'wouter';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,14 +13,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getNameInitials } from '@/lib/utilityFunctions';
 
 interface NavbarProps {
   toggleSidebar: () => void;
+  userData: any; // Adjust type as needed
 }
 
-export default function Navbar({ toggleSidebar }: NavbarProps) {
+export default function Navbar({ toggleSidebar, userData }: NavbarProps) {
   const { theme, setTheme } = useTheme();
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
+  const [, setLocation] = useLocation();
+  const logout = () => {
+    localStorage.removeItem('authToken'); // Clear auth token
+    setLocation("/login") // Redirect to login page
+  };
   const currentDate = formatDate(new Date());
   
   const toggleTheme = () => {
@@ -27,7 +35,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   };
 
   return (
-    <header className="fixed top-0 z-50 w-[60%] bg-gradient-to-r from-blue-900/80 via-indigo-900/70 to-purple-900/80 border-b border-blue-800/50 shadow-md rounded-full m-4 backdrop-blur-sm">
+    <header className="fixed top-0 z-40 w-[60%] bg-gradient-to-r from-blue-900/80 via-indigo-900/70 to-purple-900/80 border-b border-blue-800/50 shadow-md rounded-full m-4 backdrop-blur-sm">
       <div className="flex items-center justify-between h-16 px-4">
         {/* Left side: Date and toggle button */}
         <div className="flex items-center">
@@ -91,11 +99,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="User menu">
-                  <img 
-                    className="h-8 w-8 rounded-full ring-2 ring-cyan-500/50" 
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                    alt="User avatar" 
-                  />
+                  <span className='bg-green-800 rounded-full flex items-center justify-center p-2 font-bold'>
+                {getNameInitials(userData?.name || 'User')}
+              </span>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 bg-gradient-to-b from-blue-900/95 to-indigo-900/95 border-blue-700">

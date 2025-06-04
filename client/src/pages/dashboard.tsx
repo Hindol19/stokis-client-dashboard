@@ -7,12 +7,13 @@ import StockChart from '@/components/dashboard/stock-chart';
 import TopGainersLosers from '@/components/dashboard/top-gainers-losers';
 import RecentPredictions from '@/components/dashboard/recent-predictions';
 import { getStockByTicker } from '@/data/stocks';
+import { HashLoader } from 'react-spinners';
 import { getStockData } from '@/lib/utilityFunctions';
 import { Stock } from '@/data/stocks';
 
 export default function Dashboard() {
   const [selectedTicker, setSelectedTicker] = useState('TATAMOTORS.NS');
-  const [timeRange, setTimeRange] = useState('1m');
+  const [timeRange, setTimeRange] = useState('1w');
   const [showPrediction, setShowPrediction] = useState(true);
   const [stockData, setStockData] = useState<any>(null);
   const [filteredStockData, setFilteredStockData] = useState<any>(null);
@@ -113,48 +114,51 @@ export default function Dashboard() {
     });
     
     const filterDataByTimeRange = (data: any, range: string) => {
-      const now = new Date();
-      let filterDate = new Date();
+      // Sort data by date (newest to oldest) to ensure we get the most recent entries
+      const sortedActual = [...data.actualData].sort((a, b) => 
+        new Date(b.Date).getTime() - new Date(a.Date).getTime()
+      );
       
+      const sortedPredicted = [...data.predictedData].sort((a, b) => 
+        new Date(b.Date).getTime() - new Date(a.Date).getTime()
+      );
+      console.log('Sorted actual data:', sortedActual);
+      
+      let entriesCount = 0;
+      
+      // Determine how many entries to show based on the time range
       switch (range) {
-        case '1d': 
-          filterDate.setDate(now.getDate() - 1);
+        case '1d':
+          entriesCount = 1; // Just the latest entry
           break;
         case '1w':
-          filterDate.setDate(now.getDate() - 7);
+          entriesCount = 7; // Last 7 entries
           break;
         case '1m':
-          filterDate.setMonth(now.getMonth() - 1);
+          entriesCount = 30; // Last 30 entries
           break;
         case '3m':
-          filterDate.setMonth(now.getMonth() - 3);
+          entriesCount = 90; // Last 90 entries
           break;
         case '6m':
-          filterDate.setMonth(now.getMonth() - 6);
+          entriesCount = 180; // Last 180 entries
           break;
         case '1y':
-          filterDate.setFullYear(now.getFullYear() - 1);
+          entriesCount = 365; // Last 365 entries
           break;
         case '5y':
-          filterDate.setFullYear(now.getFullYear() - 5);
+          entriesCount = 365 * 5; // Last 5 years of entries
           break;
         case 'all':
         default:
-          filterDate = new Date(0); // Beginning of time
+          entriesCount = sortedActual.length; // All available entries
       }
       
-      const filterTime = filterDate.getTime();
-      console.log('Filter date:', filterDate.toISOString(), 'Filter timestamp:', filterTime);
+      console.log(`Showing the latest ${entriesCount} entries for ${range} time range`);
       
-      const filteredActual = data.actualData.filter((item: any) => {
-        const itemDate = new Date(item.Date).getTime();
-        return itemDate >= filterTime;
-      });
-      
-      const filteredPredicted = data.predictedData.filter((item: any) => {
-        const itemDate = new Date(item.Date).getTime();
-        return itemDate >= filterTime;
-      });
+      // Take the specified number of entries and then reverse to maintain chronological order
+      const filteredActual = sortedActual.slice(0, entriesCount).reverse();
+      const filteredPredicted = sortedPredicted.slice(0, entriesCount).reverse();
       
       console.log('Filtered results:', {
         originalActualCount: data.actualData.length,
@@ -204,7 +208,7 @@ export default function Dashboard() {
           onAnalyze={handleAnalyze}
         />
         
-        {calculatedStockInfo && <StockInfoSummary stock={calculatedStockInfo} />}
+        {calculatedStockInfo && !isStockDataLoading && <StockInfoSummary stock={calculatedStockInfo} />}
         
         <TimeRangeSelector 
           selectedRange={timeRange}
@@ -213,12 +217,13 @@ export default function Dashboard() {
         
         {isStockDataLoading ? (
           <div className="h-[350px] w-full flex items-center justify-center">
-            <p className="text-muted-foreground">Loading stock data...</p>
+            <HashLoader color="#c9c9c9" size={50} />
           </div>
         ) : (
           <StockChart 
             stockData={filteredStockData || stockData}
             // stockData={ stockData}
+            isStockDataLoading={isStockDataLoading}
             showPrediction={showPrediction}
             onTogglePrediction={setShowPrediction}
           />

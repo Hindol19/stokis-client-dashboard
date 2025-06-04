@@ -18,12 +18,14 @@ interface StockChartProps {
   stockData: StockPrediction;
   showPrediction: boolean;
   onTogglePrediction: (show: boolean) => void;
+  isStockDataLoading?: boolean;
 }
 
 export default function StockChart({ 
   stockData, 
   showPrediction, 
-  onTogglePrediction 
+  onTogglePrediction,
+  isStockDataLoading = false
 }: StockChartProps) {
   // Prepare data for the chart
   const chartData = stockData?.actualData ? stockData.actualData.map((item, index) => {

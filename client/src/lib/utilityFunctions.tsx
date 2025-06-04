@@ -1,5 +1,12 @@
 import axios from "axios";
 
+const getNameInitials = (name: string) => {
+  if (!name) return "";
+  const names = name.split(" ");
+  const initials = names.map((n) => n.charAt(0).toUpperCase()).join("");
+  return initials;
+}
+
 const getServerUrl = (microservice: string) => {
   // backend - https://stokis-backend.vercel.app/
   // stock_data_generation - https://stokis-data-generation-ms.vercel.app/
@@ -24,6 +31,7 @@ const getServerUrl = (microservice: string) => {
     return "https://stokis-news-analyzer-ms.vercel.app";
   }
 };
+
 
 const getAuthToken = () => {
   // This function can be used to retrieve the auth token from local storage or any other secure place
@@ -128,4 +136,22 @@ const login = async (
   } 
 }
 
-export { getStockData, register, login, getServerUrl };
+const getUserDetails = async () => {
+  try {
+    const response = await axios.get(
+      `${getServerUrl("backend")}/profile`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    throw error;
+  }
+}
+
+export { getStockData, register, login, getServerUrl, getUserDetails, getNameInitials };

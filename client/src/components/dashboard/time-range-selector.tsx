@@ -13,7 +13,7 @@ export default function TimeRangeSelector({
 }: TimeRangeSelectorProps) {
   const timeRanges = [
     // { label: '1D', value: '1d' },
-    // { label: '1W', value: '1w' },
+    { label: '1W', value: '1w' },
     { label: '1M', value: '1m' },
     { label: '3M', value: '3m' },
     { label: '6M', value: '6m' },

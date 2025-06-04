@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { useMobile } from '@/hooks/use-mobile';
-import { BarChart3, BarChart4, Newspaper, ChevronLeft, ChevronRight } from 'lucide-react';
+import { BarChart3, BarChart4, Newspaper, ChevronLeft, ChevronRight, LayoutDashboard, TrendingUp } from 'lucide-react';
+import {getNameInitials} from '@/lib/utilityFunctions';
+import Logo from '@/assets/Logo.png';
 
 interface SidebarProps {
   collapsed: boolean;
   setCollapsed: (value: boolean) => void;
+  userData: any; // Adjust type as needed
 }
 
-export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
+export default function Sidebar({ collapsed, setCollapsed, userData }: SidebarProps) {
   const [location] = useLocation();
   const isMobile = useMobile();
 
@@ -50,17 +53,17 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         />
       )}
       
-      <motion.aside
+      <div
         className={`bg-sidebar w-${collapsed ? '16' : '64'} border-r border-gray-700 flex-shrink-0 fixed h-full z-30 md:relative transition-all duration-300 ease-in-out`}
-        animate={{ width: collapsed ? 64 : 256 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        
+        // transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-5 border-b border-gray-700 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <BarChart3 className="w-8 h-8 text-primary" />
-              {!collapsed && <h1 className="text-xl font-bold text-white">Stokis</h1>}
+            <div className="flex items-center space-x-2 transition-opacity duration-300 ease-in-out">
+              <img src={Logo} alt="Logo" className={`h-16 w-16 ${collapsed ? 'hidden' : 'block'}`} />
+              {!collapsed && <h1 className="text-4xl font-bold text-white">Stokis</h1>}
             </div>
             
             <button 
@@ -74,9 +77,9 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto py-4 px-3">
             <motion.ul className="space-y-2">
-              <LinkItem href="/dashboard" text="Dashboard" Icon={BarChart3} />
+              <LinkItem href="/dashboard" text="Dashboard" Icon={LayoutDashboard} />
               {/* <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} /> */}
-              <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} disabled={false} />
+              <LinkItem href="/company-performance" text="Company Performance" Icon={TrendingUp} disabled={false} />
               <LinkItem href="/news-analysis" text="News Analysis" Icon={Newspaper} disabled={false} />
             </motion.ul>
           </nav>
@@ -84,21 +87,19 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
           {/* User */}
           <div className="border-t border-gray-700 p-4">
             <div className="flex items-center">
-              <img 
-                className="h-9 w-9 rounded-full" 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                alt="User avatar" 
-              />
+              <span className='bg-green-800 rounded-full flex items-center justify-center p-2 font-bold'>
+                {getNameInitials(userData?.name || 'User')}
+              </span>
               {!collapsed && (
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-white">John Doe</p>
-                  <p className="text-xs text-gray-400">Premium User</p>
+                  <p className="text-sm font-medium text-white">{userData?.name}</p>
+                  <p className="text-xs text-gray-400">{userData?.email}</p>
                 </div>
               )}
             </div>
           </div>
         </div>
-      </motion.aside>
+      </div>
     </>
   );
 }
