@@ -5,15 +5,27 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label";
 import { Link } from "wouter";
 import { useAuth } from "@/context/auth-provider";
-
+import { login } from "@/lib/utilityFunctions";
+import { useLocation } from "wouter";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const [, setLocation] = useLocation();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
+    const token = await login(email, password);
+    if (token) {
+      // Assuming login returns a token, you can set it in your auth context
+      // and redirect the user to the dashboard or home page
+      // For example:
+      // setAuthToken(token);
+      localStorage.setItem("authToken", token.token); // Store token in local storage
+      
+      setLocation("/dashboard"); // Redirect to dashboard after successful login
+    } else {
+      alert("Login failed. Please check your credentials.");
+    }
   };
 
   return (

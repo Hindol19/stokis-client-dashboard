@@ -76,8 +76,8 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
             <motion.ul className="space-y-2">
               <LinkItem href="/dashboard" text="Dashboard" Icon={BarChart3} />
               {/* <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} /> */}
-              <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} disabled={true} />
-              <LinkItem href="/news-analysis" text="News Analysis" Icon={Newspaper} disabled={true} />
+              <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} disabled={false} />
+              <LinkItem href="/news-analysis" text="News Analysis" Icon={Newspaper} disabled={false} />
             </motion.ul>
           </nav>
           

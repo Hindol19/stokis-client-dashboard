@@ -3,19 +3,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/context/auth-provider";
+import { register } from "@/lib/utilityFunctions";
+
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { register } = useAuth();
+  // const { register } = useAuth();
+  const [, setLocation] = useLocation();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    register(name, email, password);
+    const token = await register(name, email, password);
+    if (token) {
+      // Assuming register returns a token, you can set it in your auth context
+      // and redirect the user to the dashboard or home page
+      // For example:
+      // setAuthToken(token);
+      setLocation("/login");
+       // Redirect to dashboard after successful registration
+    }
   };
 
   return (

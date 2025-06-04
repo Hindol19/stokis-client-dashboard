@@ -7,14 +7,15 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = useAuth();
+  const isAuthenticated = Boolean(localStorage.getItem("authToken")); // Check if user is authenticated
   const [location, setLocation] = useLocation();
 
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     setLocation("/login");
-  //   }
-  // }, [isAuthenticated, setLocation]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setLocation("/login");
+    }
+  }, [isAuthenticated, setLocation]);
 
   // If not authenticated, return null (redirect happens in useEffect)
   if (!isAuthenticated) {

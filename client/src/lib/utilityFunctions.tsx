@@ -25,6 +25,14 @@ const getServerUrl = (microservice: string) => {
   }
 };
 
+const getAuthToken = () => {
+  // This function can be used to retrieve the auth token from local storage or any other secure place
+  // For now, we are returning a hardcoded token for demonstration purposes
+  console.log("Retrieving auth token from local storage", localStorage.getItem("authToken"));
+  
+  return localStorage.getItem("authToken") || "";
+}
+
 const getStockData = async (
   ticker: string,
   setIsLoading: (isLoading: boolean) => void
@@ -39,7 +47,7 @@ const getStockData = async (
         },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBhYmE2NTktM2E1Yi00MTEyLWExMjctZWMyZWJhNGZlNWYxIiwibmFtZSI6IkhpbmRvbCIsImVtYWlsIjoiaGluZG9sYmFuZXJqZWU1QGdtYWlsLmNvbSIsImV4cCI6MTc0NzM4MTYwM30.RBTuP2GxnP1iGThcEZZLZwF-X3yM80tEIm39iApvSwk`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       }
     );
@@ -69,4 +77,55 @@ const getStockData = async (
   }
 };
 
-export { getStockData };
+const register = async (
+  name: string,
+  email: string,
+  password: string,
+) => {
+  try {
+
+    const response = await axios.post(
+      `${getServerUrl("backend")}/register`,
+      {
+        name,
+        email,
+        password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during registration:", error);
+    throw error;
+  } 
+}
+
+const login = async (
+  email: string,
+  password: string,
+) => {
+  try {
+    const response = await axios.post(
+      `${getServerUrl("backend")}/login`,
+      {
+        email,
+        password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error;
+  } 
+}
+
+export { getStockData, register, login, getServerUrl };
