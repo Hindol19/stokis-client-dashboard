@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, BarChart2, Building2, Newspaper, Sparkles } from "lucide-react";
-import Logo from "@/assets/logo.png";
+import Logo from "@/assets/Logo.png";
 import Name from "@/assets/nameNoBg.png"
 
 export default function Landing() {
