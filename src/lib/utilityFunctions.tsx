@@ -144,7 +144,7 @@ const login = async (
 
 const getChatbotResponse = async (message: string) => {
   try {
-    const response = await axios.post(`${getServerUrl("chatbot")}/chat`, { message, api_key:"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" });
+    const response = await axios.post(`${getServerUrl("chatbot")}/chat`, { message, api_key: import.meta.env.VITE_HF_API_KEY });
     return response.data;
   } catch (error) {
     console.error("Error during chatbot response:", error);
