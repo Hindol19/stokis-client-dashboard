@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { useMobile } from '@/hooks/use-mobile';
-import { BarChart3, BarChart4, Newspaper, ChevronLeft, ChevronRight, LayoutDashboard, TrendingUp } from 'lucide-react';
+import { BarChart3, BarChart4, Newspaper, ChevronLeft, ChevronRight, LayoutDashboard, TrendingUp, MessageSquare, Bot } from 'lucide-react';
 import {getNameInitials} from '@/lib/utilityFunctions';
 import Logo from '@/assets/Logo.png';
 
@@ -81,6 +81,7 @@ export default function Sidebar({ collapsed, setCollapsed, userData }: SidebarPr
               {/* <LinkItem href="/company-performance" text="Company Performance" Icon={BarChart4} /> */}
               <LinkItem href="/company-performance" text="Company Performance" Icon={TrendingUp} disabled={false} />
               <LinkItem href="/news-analysis" text="News Analysis" Icon={Newspaper} disabled={false} />
+              <LinkItem href="/chatbot" text="RimtuGPT" Icon={Bot} disabled={false} />
             </motion.ul>
           </nav>
           

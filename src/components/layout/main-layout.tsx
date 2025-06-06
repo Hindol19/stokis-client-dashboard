@@ -4,6 +4,7 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import {getUserDetails} from "@/lib/utilityFunctions";
 import {HashLoader} from "react-spinners";
+import { useLocation } from "wouter";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -13,6 +14,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [userLoading, setUserLoading] = useState(false);
+  const [location] = useLocation();
+
   useEffect(() => {
     async function fetchUserData() {
       setUserLoading(true);
@@ -31,6 +34,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
+
+  
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -52,9 +57,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
         {/* Content Area */}
         <main className="flex-1 overflow-y-auto bg-background p-4">
           <div className="w-full flex flex-row justify-center">
-            <Navbar toggleSidebar={toggleSidebar} userData={userData} />
+            {location !== "/chatbot" && (
+              <Navbar toggleSidebar={toggleSidebar} userData={userData} />
+            )}
           </div>
-          <div className="mt-[100px]">{children}</div>
+          <div className={`${location === "/chatbot" ? "mt-0" : "mt-[100px]"}`}>{children}</div>
         </main>
 
         <Footer />

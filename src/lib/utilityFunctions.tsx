@@ -30,6 +30,12 @@ const getServerUrl = (microservice: string) => {
   if (microservice === "news_analyzer") {
     return "https://stokis-news-analyzer-ms.vercel.app";
   }
+  if (microservice === "chatbot") {
+    return "http://localhost:8001";
+  }
+  if (microservice === "image_server") {
+    return "http://localhost:8002";
+  }
 };
 
 
@@ -136,6 +142,16 @@ const login = async (
   } 
 }
 
+const getChatbotResponse = async (message: string) => {
+  try {
+    const response = await axios.post(`${getServerUrl("chatbot")}/chat`, { message, api_key:"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" });
+    return response.data;
+  } catch (error) {
+    console.error("Error during chatbot response:", error);
+    throw error;
+  }
+}
+
 const getUserDetails = async () => {
   try {
     const response = await axios.get(
@@ -154,4 +170,13 @@ const getUserDetails = async () => {
   }
 }
 
-export { getStockData, register, login, getServerUrl, getUserDetails, getNameInitials };
+const getImage = (image_url: string) => {
+  try {
+    return getServerUrl("image_server") + image_url;
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    throw error;
+  }
+}
+
+export { getStockData, register, login, getServerUrl, getUserDetails, getNameInitials, getChatbotResponse, getImage };

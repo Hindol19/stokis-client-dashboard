@@ -13,6 +13,7 @@ import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
+import Chatbot from "@/pages/chatbot";
 
 // Simple layout for public pages
 function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -51,6 +52,15 @@ function AppRoutes() {
           <ProtectedRoute>
             <MainLayout>
               <NewsAnalysis />
+            </MainLayout>
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/chatbot">
+        {() => (
+          <ProtectedRoute>
+            <MainLayout>
+              <Chatbot />
             </MainLayout>
           </ProtectedRoute>
         )}
@@ -96,6 +106,15 @@ function App() {
                 <ProtectedRoute>
                   <MainLayout>
                     <NewsAnalysis />
+                  </MainLayout>
+                </ProtectedRoute>
+              )}
+            </Route>
+            <Route path="/chatbot">
+              {() => (
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Chatbot />
                   </MainLayout>
                 </ProtectedRoute>
               )}
