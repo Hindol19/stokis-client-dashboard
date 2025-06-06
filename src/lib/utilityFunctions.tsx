@@ -95,6 +95,7 @@ const register = async (
   name: string,
   email: string,
   password: string,
+  setError: (error: string) => void
 ) => {
   try {
 
@@ -112,15 +113,17 @@ const register = async (
       }
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error during registration:", error);
-    throw error;
+    setError(error?.response?.data?.detail?.message || "Something went wrong");
+    
   } 
 }
 
 const login = async (
   email: string,
   password: string,
+  setError: (error: string) => void
 ) => {
   try {
     const response = await axios.post(
@@ -136,10 +139,10 @@ const login = async (
       }
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error during login:", error);
-    throw error;
-  } 
+    setError(error?.response?.data?.detail?.message || "Something went wrong");
+  }
 }
 
 const getChatbotResponse = async (message: string) => {
