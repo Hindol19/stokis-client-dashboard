@@ -14,6 +14,7 @@ import Landing from "@/pages/landing";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
 import Chatbot from "@/pages/chatbot";
+import { StockDataCacheProvider } from '@/hooks/StockDataCacheContext';
 
 // Simple layout for public pages
 function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -76,53 +77,55 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark">
         <AuthProvider>
-          <Switch>
-            {/* Public routes */}
-            <Route path="/" component={Landing} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            
-            {/* Protected routes with layout */}
-            <Route path="/dashboard">
-              {() => (
-                <ProtectedRoute>
-                  <MainLayout>
-                    <Dashboard />
-                  </MainLayout>
-                </ProtectedRoute>
-              )}
-            </Route>
-            <Route path="/company-performance">
-              {() => (
-                <ProtectedRoute>
-                  <MainLayout>
-                    <CompanyPerformance />
-                  </MainLayout>
-                </ProtectedRoute>
-              )}
-            </Route>
-            <Route path="/news-analysis">
-              {() => (
-                <ProtectedRoute>
-                  <MainLayout>
-                    <NewsAnalysis />
-                  </MainLayout>
-                </ProtectedRoute>
-              )}
-            </Route>
-            <Route path="/chatbot">
-              {() => (
-                <ProtectedRoute>
-                  <MainLayout>
-                    <Chatbot />
-                  </MainLayout>
-                </ProtectedRoute>
-              )}
-            </Route>
-            
-            <Route component={NotFound} />
-          </Switch>
-          <Toaster />
+          <StockDataCacheProvider>
+            <Switch>
+              {/* Public routes */}
+              <Route path="/" component={Landing} />
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+              
+              {/* Protected routes with layout */}
+              <Route path="/dashboard">
+                {() => (
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <Dashboard />
+                    </MainLayout>
+                  </ProtectedRoute>
+                )}
+              </Route>
+              <Route path="/company-performance">
+                {() => (
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <CompanyPerformance />
+                    </MainLayout>
+                  </ProtectedRoute>
+                )}
+              </Route>
+              <Route path="/news-analysis">
+                {() => (
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <NewsAnalysis />
+                    </MainLayout>
+                  </ProtectedRoute>
+                )}
+              </Route>
+              <Route path="/chatbot">
+                {() => (
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <Chatbot />
+                    </MainLayout>
+                  </ProtectedRoute>
+                )}
+              </Route>
+              
+              <Route component={NotFound} />
+            </Switch>
+            <Toaster />
+          </StockDataCacheProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

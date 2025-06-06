@@ -106,7 +106,7 @@ export default function StockChart({
                   tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
                   tickLine={{ stroke: 'hsl(var(--muted-foreground))' }}
                   axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) => `₹${value}`}
                   domain={['auto', 'auto']}
                 />
                 <Tooltip content={<CustomTooltip />} />

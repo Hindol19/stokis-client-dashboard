@@ -10,22 +10,22 @@ import { getStockByTicker } from '@/data/stocks';
 import { HashLoader } from 'react-spinners';
 import { getStockData } from '@/lib/utilityFunctions';
 import { Stock } from '@/data/stocks';
+import { useStockDataCache } from '@/hooks/useStockDataCache';
 
 export default function Dashboard() {
+  const { getStockData, isLoading, cacheReady } = useStockDataCache();
   const [selectedTicker, setSelectedTicker] = useState('TATAMOTORS.NS');
   const [timeRange, setTimeRange] = useState('1w');
   const [showPrediction, setShowPrediction] = useState(true);
   const [stockData, setStockData] = useState<any>(null);
   const [filteredStockData, setFilteredStockData] = useState<any>(null);
-  const [isStockDataLoading, setIsStockDataLoading] = useState(false);
   const [calculatedStockInfo, setCalculatedStockInfo] = useState<Stock | null>(null);
-  // const stock = getStockByTicker(selectedTicker);
-  
+
   useEffect(() => {
+    if (!cacheReady) return;
     const fetchStockData = async () => {
       try {
-        setIsStockDataLoading(true);
-        const data = await getStockData(selectedTicker, setIsStockDataLoading);
+        const data = await getStockData(selectedTicker);
         if (data) {
           setStockData(data);
         } else {
@@ -33,12 +33,10 @@ export default function Dashboard() {
         }
       } catch (error) {
         console.error("Error in fetchStockData:", error);
-      } finally {
-        setIsStockDataLoading(false);
       }
     };
     fetchStockData();
-  }, [selectedTicker]);
+  }, [selectedTicker, getStockData, cacheReady]);
 
   // Calculate stock info metrics from API data
   useEffect(() => {
@@ -208,22 +206,21 @@ export default function Dashboard() {
           onAnalyze={handleAnalyze}
         />
         
-        {calculatedStockInfo && !isStockDataLoading && <StockInfoSummary stock={calculatedStockInfo} />}
+        {calculatedStockInfo && !isLoading && <StockInfoSummary stock={calculatedStockInfo} />}
         
         <TimeRangeSelector 
           selectedRange={timeRange}
           onSelectRange={setTimeRange}
         />
         
-        {isStockDataLoading ? (
+        {isLoading ? (
           <div className="h-[350px] w-full flex items-center justify-center">
             <HashLoader color="#c9c9c9" size={50} />
           </div>
         ) : (
           <StockChart 
             stockData={filteredStockData || stockData}
-            // stockData={ stockData}
-            isStockDataLoading={isStockDataLoading}
+            isStockDataLoading={isLoading}
             showPrediction={showPrediction}
             onTogglePrediction={setShowPrediction}
           />
