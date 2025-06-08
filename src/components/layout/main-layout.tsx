@@ -55,16 +55,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto bg-background p-4">
+        <main className="flex-1 overflow-y-auto bg-background ">
+          <div className="p-4">
+
           <div className="w-full flex flex-row justify-center">
             {location !== "/chatbot" && (
               <Navbar toggleSidebar={toggleSidebar} userData={userData} />
             )}
           </div>
           <div className={`${location === "/chatbot" ? "mt-0" : "mt-[100px]"}`}>{children}</div>
+            </div>
+        <Footer />
         </main>
 
-        <Footer />
       </div>
     </div>
   );

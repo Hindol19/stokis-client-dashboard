@@ -3,10 +3,12 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { topGainers, topLosers } from '@/data/stocks';
+// import { topGainers, topLosers } from '@/data/stocks';
 import { formatCurrency, getChangeSign } from '@/lib/utils';
 
-export default function TopGainersLosers() {
+export default function TopGainersLosers({ topGainersLosers }: { topGainersLosers: any }) {
+  
+
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
@@ -31,11 +33,12 @@ export default function TopGainersLosers() {
                   <TableRow>
                     <TableHead className="w-[40%]">Company</TableHead>
                     <TableHead className="text-right">Price</TableHead>
+                    <TableHead className="text-right">1 month ago</TableHead>
                     <TableHead className="text-right">Change</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {topGainers.map((stock) => (
+                  {topGainersLosers?.top_gainers?.map((stock: any) => (
                     <TableRow key={stock.ticker} className="hover:bg-muted/50">
                       <TableCell className="py-4">
                         <div className="flex items-center">
@@ -44,11 +47,14 @@ export default function TopGainersLosers() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right font-mono">
-                        {formatCurrency(stock.price)}
+                        {formatCurrency(stock.current_price)}
+                      </TableCell>
+                      <TableCell className="text-right font-mono">
+                        {formatCurrency(stock.month_ago_price)}
                       </TableCell>
                       <TableCell className="text-right">
                         <Badge variant="success">
-                          +{stock.change}%
+                          +{stock.percentage_change.toFixed(2)}%
                         </Badge>
                       </TableCell>
                     </TableRow>
@@ -78,11 +84,12 @@ export default function TopGainersLosers() {
                   <TableRow>
                     <TableHead className="w-[40%]">Company</TableHead>
                     <TableHead className="text-right">Price</TableHead>
+                    <TableHead className="text-right">1 month ago</TableHead>
                     <TableHead className="text-right">Change</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {topLosers.map((stock) => (
+                  {topGainersLosers?.top_losers?.map((stock: any) => (
                     <TableRow key={stock.ticker} className="hover:bg-muted/50">
                       <TableCell className="py-4">
                         <div className="flex items-center">
@@ -91,11 +98,14 @@ export default function TopGainersLosers() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right font-mono">
-                        {formatCurrency(stock.price)}
+                        {formatCurrency(stock.current_price)}
+                      </TableCell>
+                      <TableCell className="text-right font-mono">
+                        {formatCurrency(stock.month_ago_price)}
                       </TableCell>
                       <TableCell className="text-right">
                         <Badge variant="error">
-                          {stock.change}%
+                          {stock.percentage_change.toFixed(2)}%
                         </Badge>
                       </TableCell>
                     </TableRow>

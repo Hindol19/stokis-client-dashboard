@@ -12,7 +12,7 @@ export default function Footer() {
     >
       <div className="flex flex-col md:flex-row justify-between items-center">
         <div className="text-sm text-blue-200 mb-3 md:mb-0 flex items-center">
-          <div className="w-5 h-5 bg-gradient-to-tr from-cyan-400 to-blue-500 rounded-md mr-2 shadow-md"></div>
+          {/* <div className="w-5 h-5 bg-gradient-to-tr from-cyan-400 to-blue-500 rounded-md mr-2 shadow-md"></div> */}
           <span>&copy; {new Date().getFullYear()} Stokis. All rights reserved.</span>
         </div>
         <div className="flex space-x-6">

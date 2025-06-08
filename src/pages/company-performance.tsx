@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import CompanySelector from '@/components/company/company-selector';
 import CompanyOverview from '@/components/company/company-overview';
-import StockChart from '@/components/dashboard/stock-chart';
-import TimeRangeSelector from '@/components/dashboard/time-range-selector';
+import PerformanceCharts from '@/components/company/performance-charts';
 import FinancialData from '@/components/company/financial-data';
 import AnalystRecommendations from '@/components/company/analyst-recommendations';
 import { keyMetrics, companyOverviews } from '@/data/companies';
 import { formatCurrency, formatCompactNumber } from '@/lib/utils';
+import StockChart from '@/components/dashboard/stock-chart';
+import TimeRangeSelector from '@/components/dashboard/time-range-selector';
 import { useStockDataCache } from '@/hooks/useStockDataCache';
+import { getCompanyInfo } from '@/lib/utilityFunctions';
+import { HashLoader } from 'react-spinners';
 
 export default function CompanyPerformance() {
   const { getStockData, isLoading, cacheReady } = useStockDataCache();
@@ -18,11 +21,12 @@ export default function CompanyPerformance() {
   const [showPrediction, setShowPrediction] = useState(true);
   const [stockData, setStockData] = useState<any>(null);
   const [filteredStockData, setFilteredStockData] = useState<any>(null);
-
+  const [companyInfo, setCompanyInfo] = useState<any>(null);
   const companyMetrics = keyMetrics[selectedTicker];
+
   
   // Fetch stock data when ticker changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (!cacheReady) return;
     const fetchStockData = async () => {
       const data = await getStockData(selectedTicker);
@@ -31,8 +35,18 @@ export default function CompanyPerformance() {
     fetchStockData();
   }, [selectedTicker, getStockData, cacheReady]);
 
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      console.log("Fetching company info for", selectedTicker);
+      const data = await getCompanyInfo(selectedTicker);
+      console.log("Company info fetched:", data);
+      setCompanyInfo(data);
+    };
+    fetchCompanyInfo();
+  }, [selectedTicker, getCompanyInfo]);
+
   // Filter stock data based on selected time range
-  React.useEffect(() => {
+  useEffect(() => {
     if (!stockData) return;
     const filterDataByTimeRange = (data: any, range: string) => {
       // Sort data by date (newest to oldest)
@@ -73,14 +87,20 @@ export default function CompanyPerformance() {
       
       {/* Company Selection & Overview */}
       <div className="bg-card rounded-lg shadow-lg p-5 mb-6 border border-border">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <div className="lg:col-span-2">
             <CompanySelector 
               selectedTicker={selectedTicker}
               onSelectTicker={setSelectedTicker}
             />
             
-            <CompanyOverview ticker={selectedTicker} />
+            {companyInfo ? (
+              <CompanyOverview ticker={selectedTicker} companyInfo={companyInfo} />
+            ) : (
+              <div className="flex items-center justify-center h-32">
+                <HashLoader color="#c9c9c9" size={40} />
+              </div>
+            )}
           </div>
           
           {companyMetrics && (
@@ -135,10 +155,10 @@ export default function CompanyPerformance() {
       </div>
       
       {/* Financial Data */}
-      <FinancialData ticker={selectedTicker} />
+      {/* <FinancialData ticker={selectedTicker} /> */}
       
       {/* Analyst Recommendations */}
-      <AnalystRecommendations ticker={selectedTicker} />
+      {/* <AnalystRecommendations ticker={selectedTicker} /> */}
     </div>
   );
 }

@@ -182,4 +182,40 @@ const getImage = (image_url: string) => {
   }
 }
 
-export { getStockData, register, login, getServerUrl, getUserDetails, getNameInitials, getChatbotResponse, getImage };
+const getCompanyInfo = async (ticker: string) => {
+  try {
+    const response = await axios.get(`${getServerUrl("backend")}/stock-info`, {
+      params: { ticker_symbol: ticker },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+    console.log("Company info response:", response.data);
+    return response.data.data[0];
+  } catch (error) {
+    console.error("Error fetching company info:", error);
+    throw error;
+  }
+}
+
+const getTopGainersLosers = async () => {
+  try {
+    const response = await axios.get(`${getServerUrl("backend")}/top-gainers-and-losers`,
+    {
+      params: {
+        n:5,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top gainers losers:", error);
+    throw error;  
+  }
+}
+
+export { getStockData, register, login, getServerUrl, getUserDetails, getNameInitials, getChatbotResponse, getImage, getCompanyInfo, getTopGainersLosers };

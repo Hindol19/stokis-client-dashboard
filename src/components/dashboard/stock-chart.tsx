@@ -13,19 +13,34 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { StockPrediction } from '@/data/stocks';
 import { formatCurrency } from '@/lib/utils';
+import {
+  Chart,
+  ChartCanvas,
+  CandlestickSeries,
+  XAxis as FinancialXAxis,
+  YAxis as FinancialYAxis,
+  CrossHairCursor,
+  MouseCoordinateX,
+  MouseCoordinateY,
+  discontinuousTimeScaleProvider,
+  last,
+  withDeviceRatio,
+} from 'react-financial-charts';
 
 interface StockChartProps {
   stockData: StockPrediction;
   showPrediction: boolean;
   onTogglePrediction: (show: boolean) => void;
   isStockDataLoading?: boolean;
+  chartType?: 'line' | 'candlestick';
 }
 
 export default function StockChart({ 
   stockData, 
   showPrediction, 
   onTogglePrediction,
-  isStockDataLoading = false
+  isStockDataLoading = false,
+  chartType = 'line',
 }: StockChartProps) {
   // Prepare data for the chart
   const chartData = stockData?.actualData ? stockData.actualData.map((item, index) => {
@@ -70,6 +85,76 @@ export default function StockChart({
     }
     return null;
   };
+
+  if (chartType === 'candlestick') {
+    // Prepare candlestick data: expects [{ date, open, high, low, close }]
+    const candleData = stockData?.actualData?.map((item: any) => ({
+      date: new Date(item.Date),
+      open: item.Open,
+      high: item.High,
+      low: item.Low,
+      close: item.Close,
+    })) || [];
+
+    // Setup scale provider
+    const scaleProvider = discontinuousTimeScaleProvider.inputDateAccessor((d: any) => d.date);
+    const { data, xScale, xAccessor, displayXAccessor } = scaleProvider(candleData);
+    const start = xAccessor(last(data));
+    const end = xAccessor(data[Math.max(0, data.length - 50)]);
+    const xExtents = [end, start];
+
+    return (
+      <Card className="bg-card border-border">
+        <CardContent className="p-5">
+          <div className="h-[350px] w-full">
+            <div style={{ width: '100%', height: '100%' }}>
+              <ChartCanvas
+                height={350}
+                width={window.innerWidth - 220}
+                ratio={window.devicePixelRatio || 1}
+                margin={{ left: 50, right: 60, top: 10, bottom: 30 }}
+                data={data}
+                xScale={xScale}
+                xAccessor={xAccessor}
+                displayXAccessor={displayXAccessor}
+                seriesName="CandlestickSeries"
+                xExtents={xExtents}
+              >
+                <Chart id={1} yExtents={(d: any) => [d.high, d.low]}>
+                  <FinancialXAxis
+                    showGridLines
+                    tickLabelFill='#ffffff'
+                  />
+                  <FinancialYAxis
+                    showGridLines
+                    tickLabelFill="#ffffff"
+                    tickFormat={value => `₹${value}`}
+                    orient="right"
+                  />
+                  <CandlestickSeries
+                    stroke={d => d.close > d.open ? '#16a34a' : '#dc2626'}
+                    wickStroke={d => d.close > d.open ? '#16a34a' : '#dc2626'}
+                    fill={d => d.close > d.open ? '#16a34a' : '#dc2626'}
+                  />
+                  <MouseCoordinateX
+                    displayFormat={(d: Date) => d.toLocaleDateString()}
+                    fill="hsl(var(--muted-foreground))"
+                    fontFamily="inherit"
+                  />
+                  <MouseCoordinateY
+                    displayFormat={(d: number) => `₹${d.toFixed(2)}`}
+                    fill="hsl(var(--muted-foreground))"
+                    fontFamily="inherit"
+                  />
+                </Chart>
+                <CrossHairCursor />
+              </ChartCanvas>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <motion.div

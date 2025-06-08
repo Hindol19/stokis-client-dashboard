@@ -75,7 +75,7 @@ export default function Chatbot() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 mt-0 mb-0 h-[calc(100vh-90px)] overflow-hidden backdrop-blur-sm">
+    <div className="flex flex-col w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 mt-0 mb-0 h-[calc(100vh-30px)] overflow-hidden backdrop-blur-sm">
       {/* Animated Background Pattern */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
@@ -98,7 +98,7 @@ export default function Chatbot() {
           </div>
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-              RimtuGPT
+              Stokis AI
             </h1>
             <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <Sparkles className="w-3 h-3" />

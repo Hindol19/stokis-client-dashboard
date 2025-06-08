@@ -8,23 +8,42 @@ import TopGainersLosers from '@/components/dashboard/top-gainers-losers';
 import RecentPredictions from '@/components/dashboard/recent-predictions';
 import { getStockByTicker } from '@/data/stocks';
 import { HashLoader } from 'react-spinners';
-import { getStockData } from '@/lib/utilityFunctions';
+import { getStockData, getTopGainersLosers } from '@/lib/utilityFunctions';
 import { Stock } from '@/data/stocks';
 import { useStockDataCache } from '@/hooks/useStockDataCache';
 
 export default function Dashboard() {
-  const { getStockData, isLoading, cacheReady } = useStockDataCache();
+  const { getStockData, isLoading, cacheReady, stockDataCache } = useStockDataCache();
   const [selectedTicker, setSelectedTicker] = useState('TATAMOTORS.NS');
   const [timeRange, setTimeRange] = useState('1w');
   const [showPrediction, setShowPrediction] = useState(true);
   const [stockData, setStockData] = useState<any>(null);
   const [filteredStockData, setFilteredStockData] = useState<any>(null);
   const [calculatedStockInfo, setCalculatedStockInfo] = useState<Stock | null>(null);
+  const [topGainersLosers, setTopGainersLosers] = useState<any>(null);
+  const [chartType, setChartType] = useState<'line' | 'candlestick'>('line');
+
+  useEffect(() => {
+    const fetchTopGainersLosers = async () => {
+      try {
+        const data = await getTopGainersLosers();
+        if (data) {
+          setTopGainersLosers(data);
+        } else {
+          console.error("Failed to fetch top gainers losers");
+        }
+      } catch (error) {
+        console.error("Error in fetchTopGainersLosers:", error);
+      }
+    };
+    fetchTopGainersLosers();
+  }, []);
 
   useEffect(() => {
     if (!cacheReady) return;
     const fetchStockData = async () => {
       try {
+        console.log("Fetching stock data for", selectedTicker);
         const data = await getStockData(selectedTicker);
         if (data) {
           setStockData(data);
@@ -37,6 +56,12 @@ export default function Dashboard() {
     };
     fetchStockData();
   }, [selectedTicker, getStockData, cacheReady]);
+
+  useEffect(() => {
+    if (cacheReady) {
+      console.log("Current stockDataCache:", stockDataCache);
+    }
+  }, [stockDataCache, cacheReady]);
 
   // Calculate stock info metrics from API data
   useEffect(() => {
@@ -206,6 +231,16 @@ export default function Dashboard() {
           onAnalyze={handleAnalyze}
         />
         
+        {/* Chart Type Toggle Button */}
+        <div className="flex justify-end mb-2">
+          <button
+            className="px-4 py-2 rounded bg-primary text-white hover:bg-primary/80 transition"
+            onClick={() => setChartType(chartType === 'line' ? 'candlestick' : 'line')}
+          >
+            {chartType === 'line' ? 'Show Candlestick Chart' : 'Show Line Chart'}
+          </button>
+        </div>
+        
         {calculatedStockInfo && !isLoading && <StockInfoSummary stock={calculatedStockInfo} />}
         
         <TimeRangeSelector 
@@ -223,15 +258,15 @@ export default function Dashboard() {
             isStockDataLoading={isLoading}
             showPrediction={showPrediction}
             onTogglePrediction={setShowPrediction}
+            chartType={chartType}
           />
         )}
       </div>
       
       {/* Gainers and Losers */}
-      <TopGainersLosers />
+      <TopGainersLosers topGainersLosers={topGainersLosers} />
       
-      {/* Recent Predictions */}
-      <RecentPredictions />
+     
     </div>
   );
 }
