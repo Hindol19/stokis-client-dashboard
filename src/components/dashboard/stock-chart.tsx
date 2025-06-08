@@ -33,6 +33,7 @@ interface StockChartProps {
   onTogglePrediction: (show: boolean) => void;
   isStockDataLoading?: boolean;
   chartType?: "line" | "candlestick";
+  page?: string;
 }
 
 export default function StockChart({
@@ -41,6 +42,7 @@ export default function StockChart({
   onTogglePrediction,
   isStockDataLoading = false,
   chartType = "line",
+  page = "dashboard",
 }: StockChartProps) {
   // Prepare data for the chart
   let chartData: {
@@ -271,7 +273,7 @@ export default function StockChart({
                 Actual Price
               </span>
             </div>
-            <div className="flex items-center space-x-2">
+            {page !== "company-performance" && <div className="flex items-center space-x-2">
               <div
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: stockData?.predictionColor }}
@@ -279,7 +281,7 @@ export default function StockChart({
               <span className="text-sm text-muted-foreground">
                 Predicted Price
               </span>
-            </div>
+            </div>}
                 </div>
             {/* <div className="flex items-center space-x-2">
               <span className="text-sm text-muted-foreground">Show Prediction</span>
@@ -288,12 +290,12 @@ export default function StockChart({
                 onCheckedChange={(checked) => onTogglePrediction(checked as boolean)}
               />
             </div> */}
-            <div className="flex items-center text-muted-foreground space-x-2">
+            {page !== "company-performance" && <div className="flex items-center text-muted-foreground space-x-2">
               Prediction:{" "}
               <span className="ml-2 text-sm font-bold text-muted-foreground" style={{ color: stockData?.predictionColor }}>
                 {stockData?.companyInfo?.prediction}
               </span>
-            </div>
+            </div>}
           </div>
         </CardContent>
       </Card>

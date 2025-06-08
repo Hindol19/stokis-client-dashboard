@@ -88,7 +88,7 @@ export default function CompanyPerformance() {
         .reverse();
       return {
         actualData: filteredActual,
-        predictedData: filteredPredicted,
+        companyInfo: data.companyInfo,
       };
     };
     setFilteredStockData(filterDataByTimeRange(stockData, timeRange));
@@ -202,6 +202,7 @@ export default function CompanyPerformance() {
             isStockDataLoading={isLoading}
             showPrediction={showPrediction}
             onTogglePrediction={setShowPrediction}
+            page = "company-performance"
           />
         )}
       </div>
