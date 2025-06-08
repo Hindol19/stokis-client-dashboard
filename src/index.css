@@ -108,3 +108,25 @@
     scrollbar-width: none;  /* Firefox */
   }
 }
+
+@keyframes blink-positive {
+  0%, 100% { background-color: rgba(34,197,94,0.45); }
+  50% { background-color: rgba(34,197,94,0.8); }
+}
+@keyframes blink-negative {
+  0%, 100% { background-color: rgba(239,68,68,0.45); }
+  50% { background-color: rgba(239,68,68,0.8); }
+}
+@keyframes blink-neutral {
+  0%, 100% { background-color: rgba(202,138,4,0.45); }
+  50% { background-color: rgba(202,138,4,0.8); }
+}
+.blink-bg-positive {
+  animation: blink-positive 1s infinite;
+}
+.blink-bg-negative {
+  animation: blink-negative 1s infinite;
+}
+.blink-bg-neutral {
+  animation: blink-neutral 1s infinite;
+}

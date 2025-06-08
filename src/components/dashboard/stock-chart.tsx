@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   Area,
@@ -10,7 +10,6 @@ import {
   CartesianGrid,
 } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { StockPrediction } from "@/data/stocks";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -81,19 +80,24 @@ export default function StockChart({
       return (
         <div className="bg-card p-3 border border-border rounded-md shadow">
           <p className="text-sm font-medium">{label}</p>
-          {payload.map(
-            (entry: any, index: number) =>
-              entry.value !== null && (
-                <p
-                  key={index}
-                  className="text-sm"
-                  style={{ color: entry.color }}
-                >
-                  {entry.name === "actual" ? "Actual: " : "Predicted: "}
-                  {formatCurrency(entry.value)}
+          {payload.map((entry: any, index: number) => {
+            if (entry.value === null) return null;
+            if (entry.name === "actual") {
+              return (
+                <p key={index} className="text-sm" style={{ color: entry.color }}>
+                  Actual: {formatCurrency(entry.value)}
                 </p>
-              )
-          )}
+              );
+            } else if (entry.name === "predicted") {
+              return (
+                <p key={index} className="text-sm" style={{ color: entry.color }}>
+                  Prediction: {stockData?.companyInfo?.prediction}
+                  
+                </p>
+              );
+            }
+            return null;
+          })}
         </div>
       );
     }
@@ -266,36 +270,35 @@ export default function StockChart({
           {/* Prediction Toggle */}
           <div className="mt-4 flex justify-between items-center space-x-4">
             <div className="flex items-center space-x-2">
-
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-primary rounded-full"></div>
-              <span className="text-sm text-muted-foreground">
-                Actual Price
-              </span>
-            </div>
-            {page !== "company-performance" && <div className="flex items-center space-x-2">
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: stockData?.predictionColor }}
-                ></div>
-              <span className="text-sm text-muted-foreground">
-                Predicted Price
-              </span>
-            </div>}
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-primary rounded-full"></div>
+                <span className="text-sm text-muted-foreground">
+                  Actual Price
+                </span>
+              </div>
+              {page !== "company-performance" && (
+                <div className="flex items-center space-x-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: stockData?.predictionColor }}
+                  ></div>
+                  <span className="text-sm text-muted-foreground">
+                    Predicted Price
+                  </span>
                 </div>
-            {/* <div className="flex items-center space-x-2">
-              <span className="text-sm text-muted-foreground">Show Prediction</span>
-              <Checkbox 
-                checked={showPrediction}
-                onCheckedChange={(checked) => onTogglePrediction(checked as boolean)}
-              />
-            </div> */}
-            {page !== "company-performance" && <div className="flex items-center text-muted-foreground space-x-2">
-              Prediction:{" "}
-              <span className="ml-2 text-sm font-bold text-muted-foreground" style={{ color: stockData?.predictionColor }}>
-                {stockData?.companyInfo?.prediction}
-              </span>
-            </div>}
+              )}
+            </div>
+            {/* {page !== "company-performance" && (
+              <div className="flex items-center text-muted-foreground space-x-2">
+                Prediction:{" "}
+                <span
+                  className="ml-2 text-sm font-bold text-muted-foreground"
+                  style={{ color: stockData?.predictionColor }}
+                >
+                  {stockData?.companyInfo?.prediction}
+                </span>
+              </div>
+            )} */}
           </div>
         </CardContent>
       </Card>

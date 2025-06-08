@@ -5,8 +5,6 @@ import StockInfoSummary from '@/components/dashboard/stock-info-summary';
 import TimeRangeSelector from '@/components/dashboard/time-range-selector';
 import StockChart from '@/components/dashboard/stock-chart';
 import TopGainersLosers from '@/components/dashboard/top-gainers-losers';
-import RecentPredictions from '@/components/dashboard/recent-predictions';
-import { getStockByTicker } from '@/data/stocks';
 import { HashLoader } from 'react-spinners';
 import { getStockData, getTopGainersLosers } from '@/lib/utilityFunctions';
 import { Stock } from '@/data/stocks';

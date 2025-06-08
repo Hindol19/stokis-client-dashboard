@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { NewsItem } from '@/data/news';
+import React from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { NewsItem } from "@/data/news";
 
 interface NewsCardProps {
   news: NewsItem;
@@ -13,28 +13,28 @@ interface NewsCardProps {
 export default function NewsCard({ news, index }: NewsCardProps) {
   const getBadgeVariant = (sentiment: string) => {
     switch (sentiment) {
-      case 'positive':
-        return 'success';
-      case 'negative':
-        return 'error';
-      case 'neutral':
+      case "positive":
+        return "success";
+      case "negative":
+        return "error";
+      case "neutral":
       default:
-        return 'warning';
+        return "warning";
     }
   };
-  
+
   const getBadgeText = (sentiment: string) => {
     switch (sentiment) {
-      case 'positive':
-        return 'Positive Impact';
-      case 'negative':
-        return 'Negative Impact';
-      case 'neutral':
+      case "positive":
+        return "Positive Impact";
+      case "negative":
+        return "Negative Impact";
+      case "neutral":
       default:
-        return 'Neutral Impact';
+        return "Neutral Impact";
     }
   };
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -43,16 +43,35 @@ export default function NewsCard({ news, index }: NewsCardProps) {
     >
       <Card className="overflow-hidden border-border transition-transform duration-300 hover:transform hover:scale-[1.02] h-full flex flex-col">
         <div className="h-48 overflow-hidden">
-          <img className="w-full h-full object-cover" src={news.thumbnail || 'https://epss.ucla.edu/static/images/default-news.png'} alt={news.title} />
+          <img
+            className="w-full h-full object-cover"
+            src={
+              news.thumbnail ||
+              "https://epss.ucla.edu/static/images/default-news.png"
+            }
+            alt={news.title}
+          />
         </div>
         <CardContent className="p-5 flex-grow">
           <div className="flex justify-between items-start mb-3">
-            <Badge variant={getBadgeVariant(news.sentiment)}>
+            <div
+              className={`flex items-center justify-center space-x-2 border-white border-[1px] border-solid border-opacity-20 rounded-full px-3 py-2 text-xs font-semibold ${
+                news.sentiment === "positive"
+                  ? "bg-green-500 bg-opacity-45 "
+                  : news.sentiment === "negative"
+                  ? "bg-red-500 bg-opacity-65"
+                  : "bg-yellow-700 bg-opacity-65"
+              }`}
+            >
               {getBadgeText(news.sentiment)}
-            </Badge>
-            <span className="text-xs text-muted-foreground">{news.published_date}</span>
+            </div>
+            <span className="text-xs text-muted-foreground">
+              {news.published_date}
+            </span>
           </div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">{news.title}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-2">
+            {news.title}
+          </h3>
           <p className="text-muted-foreground text-sm mb-4">{news.content}</p>
         </CardContent>
         <CardFooter className="p-5 pt-0">
@@ -62,8 +81,14 @@ export default function NewsCard({ news, index }: NewsCardProps) {
                 {news.company}
               </Badge>
             </div>
-            <Button asChild variant="link" className="text-primary hover:text-primary-foreground text-sm font-medium p-0">
-              <a href={news.url} target="_blank" rel="noopener noreferrer">Read more</a>
+            <Button
+              asChild
+              variant="link"
+              className="text-primary hover:text-primary-foreground text-sm font-medium p-0"
+            >
+              <a href={news.url} target="_blank" rel="noopener noreferrer">
+                Read more
+              </a>
             </Button>
           </div>
         </CardFooter>
