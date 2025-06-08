@@ -110,7 +110,7 @@ export default function StockChart({
             <div style={{ width: '100%', height: '100%' }}>
               <ChartCanvas
                 height={350}
-                width={window.innerWidth - 220}
+                width={window.innerWidth - 380}
                 ratio={window.devicePixelRatio || 1}
                 margin={{ left: 50, right: 60, top: 10, bottom: 30 }}
                 data={data}

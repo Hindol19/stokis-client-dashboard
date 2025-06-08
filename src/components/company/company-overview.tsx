@@ -9,29 +9,6 @@ interface CompanyOverviewProps {
   companyInfo: any;
 }
 
-// Tata Motors Limited company info (for display in company information section)
-const tataMotorsInfo = {
-  ticker: "TATAMOTORS.NS",
-  company: "Tata Motors Limited",
-  website: "https://www.tatamotors.com",
-  sector: "Consumer Cyclical",
-  "1y_target_est": 800.4839,
-  "52_week_high": 1179,
-  "52_week_low": 535.75,
-  ask: 704.75,
-  beta_5_monthly: 1.147,
-  bid: 704.7,
-  eps: 64.98,
-  earning_date: "2025-05-13",
-  ex_dividend_range: "2025-06-04",
-  forward_dividend: 6,
-  yield: 0.84,
-  market_cap: 2596902010880,
-  pe_ratio: 10.855648,
-  quote_price: 705.4,
-  prediction: "Buy"
-};
-
 const tataMotorsLogo = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Tata_Motors_Logo.svg"; // Placeholder logo
 
 const InfoItem = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) => (
@@ -59,37 +36,36 @@ export default function CompanyOverview({ ticker, companyInfo }: CompanyOverview
     );
   }
 
-  // Custom Tata Motors info display
   if (companyInfo) {
     const infoItems = [
-      { label: 'Sector', value: tataMotorsInfo.sector, icon: <FaIndustry /> },
-      { label: '1Y Target Est', value: tataMotorsInfo['1y_target_est'], icon: <FaChartLine /> },
-      { label: '52-Week High', value: tataMotorsInfo['52_week_high'], icon: <FaArrowUp className="text-green-600" /> },
-      { label: '52-Week Low', value: tataMotorsInfo['52_week_low'], icon: <FaArrowDown className="text-red-600" /> },
-      { label: 'Ask', value: tataMotorsInfo.ask, icon: <FaMoneyBillWave /> },
-      { label: 'Bid', value: tataMotorsInfo.bid, icon: <FaMoneyBillWave /> },
-      { label: 'Beta (5M)', value: tataMotorsInfo.beta_5_monthly, icon: <FaPercent /> },
-      { label: 'EPS', value: tataMotorsInfo.eps, icon: <FaMoneyBillWave /> },
-      { label: 'Earning Date', value: tataMotorsInfo.earning_date, icon: <FaCalendarAlt /> },
-      { label: 'Ex-Dividend Range', value: tataMotorsInfo.ex_dividend_range, icon: <FaCalendarAlt /> },
-      { label: 'Forward Dividend', value: tataMotorsInfo.forward_dividend, icon: <FaMoneyBillWave /> },
-      { label: 'Yield', value: `${tataMotorsInfo.yield}%`, icon: <FaPercent /> },
-      { label: 'Market Cap', value: tataMotorsInfo.market_cap.toLocaleString(), icon: <FaGlobe /> },
-      { label: 'P/E Ratio', value: tataMotorsInfo.pe_ratio, icon: <FaChartLine /> },
-      { label: 'Quote Price', value: tataMotorsInfo.quote_price, icon: <FaMoneyBillWave /> },
+      { label: 'Sector', value: companyInfo.sector, icon: <FaIndustry /> },
+      { label: '1Y Target Est', value: companyInfo['1y_target_est'], icon: <FaChartLine /> },
+      { label: '52-Week High', value: companyInfo['52_week_high'], icon: <FaArrowUp className="text-green-600" /> },
+      { label: '52-Week Low', value: companyInfo['52_week_low'], icon: <FaArrowDown className="text-red-600" /> },
+      { label: 'Ask', value: companyInfo.ask, icon: <FaMoneyBillWave /> },
+      { label: 'Bid', value: companyInfo.bid, icon: <FaMoneyBillWave /> },
+      { label: 'Beta (5M)', value: companyInfo.beta_5_monthly, icon: <FaPercent /> },
+      { label: 'EPS', value: companyInfo.eps, icon: <FaMoneyBillWave /> },
+      { label: 'Earning Date', value: companyInfo.earning_date, icon: <FaCalendarAlt /> },
+      { label: 'Ex-Dividend Range', value: companyInfo.ex_dividend_range, icon: <FaCalendarAlt /> },
+      { label: 'Forward Dividend', value: companyInfo.forward_dividend, icon: <FaMoneyBillWave /> },
+      { label: 'Yield', value: `${companyInfo.yield}%`, icon: <FaPercent /> },
+      { label: 'Market Cap', value: companyInfo.market_cap?.toLocaleString?.() ?? companyInfo.market_cap, icon: <FaGlobe /> },
+      { label: 'P/E Ratio', value: companyInfo.pe_ratio, icon: <FaChartLine /> },
+      { label: 'Quote Price', value: companyInfo.quote_price, icon: <FaMoneyBillWave /> },
       {
         label: 'Prediction',
         value: (
           <span
             className={`font-bold ${
-              tataMotorsInfo.prediction === 'Buy'
+              companyInfo.prediction === 'Buy'
                 ? 'text-green-600'
-                : tataMotorsInfo.prediction === 'Sell'
+                : companyInfo.prediction === 'Sell'
                 ? 'text-red-600'
                 : 'text-yellow-600'
             }`}
           >
-            {tataMotorsInfo.prediction}
+            {companyInfo.prediction}
           </span>
         ),
         icon: <FaChartLine />,
@@ -101,18 +77,18 @@ export default function CompanyOverview({ ticker, companyInfo }: CompanyOverview
         <CardContent className="p-8">
           <div className="mb-4">
             <h3 className="text-2xl font-bold text-foreground mb-1">
-              {tataMotorsInfo.company}{' '}
+              {companyInfo.company}{' '}
               <span className="text-base font-medium text-muted-foreground">
-                ({tataMotorsInfo.ticker})
+                ({companyInfo.ticker})
               </span>
             </h3>
             <a
-              href={tataMotorsInfo.website}
+              href={companyInfo.website}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline text-sm"
             >
-              {tataMotorsInfo.website}
+              {companyInfo.website}
             </a>
           </div>
 
