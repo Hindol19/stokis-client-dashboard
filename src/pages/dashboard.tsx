@@ -198,6 +198,8 @@ export default function Dashboard() {
       return {
         actualData: filteredActual,
         predictedData: filteredPredicted,
+        companyInfo: stockData.companyInfo,
+        predictionColor: stockData.predictionColor,
       };
     };
     

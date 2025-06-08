@@ -44,6 +44,8 @@ export default function StockChart({
 }: StockChartProps) {
   // Prepare data for the chart
   let chartData: { date: string; actual: number | null; predicted: number | null }[] = [];
+
+
   if (stockData?.actualData?.length) {
     chartData = stockData.actualData.map((item) => ({
       date: item["Date"],

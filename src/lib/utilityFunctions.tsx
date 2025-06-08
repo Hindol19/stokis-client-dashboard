@@ -122,7 +122,7 @@ const getStockData = async (
       actualData: actualData,
       predictedData: predictedData,
       companyInfo: companyInfo.data.data[0],
-      predictionColor: "#fcb103",
+      predictionColor: companyInfoObject.prediction === "Buy" ? "hsl(var(--success))" : companyInfoObject.prediction === "Hold" ? "#fcb103" : "hsl(var(--danger))",
     };
     console.log(stockData);
     //   console.log(response.data.data);
