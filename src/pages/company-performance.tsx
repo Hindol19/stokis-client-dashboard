@@ -32,17 +32,17 @@ export default function CompanyPerformance() {
     fetchStockData();
   }, [selectedTicker, getStockData, cacheReady]);
 
-  useEffect(() => {
-    const fetchCompanyInfo = async () => {
-      console.log("Fetching company info for", selectedTicker);
-      setIsInfoLoading(true);
-      const data = await getCompanyInfo(selectedTicker);
-      console.log("Company info fetched:", data);
-      setCompanyInfo(data);
-      setIsInfoLoading(false);
-    };
-    fetchCompanyInfo();
-  }, [selectedTicker, getCompanyInfo]);
+  // useEffect(() => {
+  //   const fetchCompanyInfo = async () => {
+  //     console.log("Fetching company info for", selectedTicker);
+  //     setIsInfoLoading(true);
+  //     const data = await getCompanyInfo(selectedTicker);
+  //     console.log("Company info fetched:", data);
+  //     setCompanyInfo(data);
+  //     setIsInfoLoading(false);
+  //   };
+  //   fetchCompanyInfo();
+  // }, [selectedTicker, getCompanyInfo]);
 
   // Filter stock data based on selected time range
   useEffect(() => {
@@ -119,10 +119,10 @@ export default function CompanyPerformance() {
               onSelectTicker={setSelectedTicker}
             />
 
-            {companyInfo && !isInfoLoading ? (
+            {stockData?.companyInfo && !isLoading ? (
               <CompanyOverview
                 ticker={selectedTicker}
-                companyInfo={companyInfo}
+                companyInfo={stockData?.companyInfo}
               />
             ) : (
               <div className="flex items-center justify-center h-32">

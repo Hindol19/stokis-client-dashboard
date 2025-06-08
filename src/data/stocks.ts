@@ -19,6 +19,8 @@ export interface StockPricePoint {
 export interface StockPrediction {
   actualData: StockPricePoint[];
   predictedData: StockPricePoint[];
+  companyInfo: any;
+  predictionColor: string;
 }
 
 export interface PredictionComparison {
@@ -477,6 +479,8 @@ export function generatePredictionData(
   return {
     actualData,
     predictedData,
+    companyInfo: {},
+    predictionColor: "",
   };
 }
 

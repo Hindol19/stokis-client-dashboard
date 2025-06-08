@@ -5,7 +5,7 @@ const getNameInitials = (name: string) => {
   const names = name.split(" ");
   const initials = names.map((n) => n.charAt(0).toUpperCase()).join("");
   return initials;
-}
+};
 
 const getServerUrl = (microservice: string) => {
   // backend - https://stokis-backend.vercel.app/
@@ -38,14 +38,16 @@ const getServerUrl = (microservice: string) => {
   }
 };
 
-
 const getAuthToken = () => {
   // This function can be used to retrieve the auth token from local storage or any other secure place
   // For now, we are returning a hardcoded token for demonstration purposes
-  console.log("Retrieving auth token from local storage", localStorage.getItem("authToken"));
-  
+  console.log(
+    "Retrieving auth token from local storage",
+    localStorage.getItem("authToken")
+  );
+
   return localStorage.getItem("authToken") || "";
-}
+};
 
 const getStockData = async (
   ticker: string,
@@ -66,6 +68,17 @@ const getStockData = async (
       }
     );
 
+    const companyInfo = await axios.get(
+      `${getServerUrl("backend")}/stock-info`,
+      {
+        params: { ticker_symbol: ticker },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      }
+    );
+
     // const predictedData = await axios.get(
     //   `${getServerUrl("stock_data_prediction")}/predict`,
     //   {
@@ -73,9 +86,43 @@ const getStockData = async (
     //   }
     // );
 
+    const companyInfoObject = companyInfo.data.data[0];
+    var predictedData: any[] = [];
+    const actualData = response.data.data || [];
+    if (actualData.length > 0 && companyInfoObject?.prediction) {
+      const lastActual = actualData[actualData.length - 1];
+      const lastDate = new Date(lastActual.Date);
+      const lastClose = lastActual.Close;
+      const days = 5;
+      let dailyFactor = 1;
+      if (companyInfoObject.prediction === "Buy") {
+        dailyFactor = Math.pow(1.05, 1 / days); // Compound to 10% over 5 days
+      } else if (companyInfoObject.prediction === "Sell") {
+        dailyFactor = Math.pow(0.90, 1 / days); // Compound to -10% over 5 days
+      } else if (companyInfoObject.prediction === "Hold") {
+        dailyFactor = 1;
+      }
+      let close = lastClose;
+      for (let i = 0; i < days; i++) {
+        const date = new Date(lastDate);
+        date.setDate(lastDate.getDate() + i);
+        if (companyInfoObject.prediction === "Hold") {
+          close = lastClose;
+        } else if (i !== 0) {
+          close = close * dailyFactor;
+        }
+        predictedData.push({
+          Date: date.toISOString().split("T")[0],
+          Close: parseFloat(close.toFixed(2)),
+        });
+      }
+    }
+
     const stockData = {
-      actualData: response.data.data || [],
-      predictedData:  [],
+      actualData: actualData,
+      predictedData: predictedData,
+      companyInfo: companyInfo.data.data[0],
+      predictionColor: "#fcb103",
     };
     console.log(stockData);
     //   console.log(response.data.data);
@@ -98,7 +145,6 @@ const register = async (
   setError: (error: string) => void
 ) => {
   try {
-
     const response = await axios.post(
       `${getServerUrl("backend")}/register`,
       {
@@ -116,9 +162,8 @@ const register = async (
   } catch (error: any) {
     console.error("Error during registration:", error);
     setError(error?.response?.data?.detail?.message || "Something went wrong");
-    
-  } 
-}
+  }
+};
 
 const login = async (
   email: string,
@@ -143,35 +188,35 @@ const login = async (
     console.error("Error during login:", error);
     setError(error?.response?.data?.detail?.message || "Something went wrong");
   }
-}
+};
 
 const getChatbotResponse = async (message: string) => {
   try {
-    const response = await axios.post(`${getServerUrl("chatbot")}/chat`, { message, api_key: import.meta.env.VITE_HF_API_KEY });
+    const response = await axios.post(`${getServerUrl("chatbot")}/chat`, {
+      message,
+      api_key: import.meta.env.VITE_HF_API_KEY,
+    });
     return response.data;
   } catch (error) {
     console.error("Error during chatbot response:", error);
     throw error;
   }
-}
+};
 
 const getUserDetails = async () => {
   try {
-    const response = await axios.get(
-      `${getServerUrl("backend")}/profile`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      }
-    );
+    const response = await axios.get(`${getServerUrl("backend")}/profile`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching user details:", error);
     throw error;
   }
-}
+};
 
 const getImage = (image_url: string) => {
   try {
@@ -180,7 +225,7 @@ const getImage = (image_url: string) => {
     console.error("Error fetching image:", error);
     throw error;
   }
-}
+};
 
 const getCompanyInfo = async (ticker: string) => {
   try {
@@ -197,25 +242,38 @@ const getCompanyInfo = async (ticker: string) => {
     console.error("Error fetching company info:", error);
     throw error;
   }
-}
+};
 
 const getTopGainersLosers = async () => {
   try {
-    const response = await axios.get(`${getServerUrl("backend")}/top-gainers-and-losers`,
-    {
-      params: {
-        n:5,
-      },
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-    });
+    const response = await axios.get(
+      `${getServerUrl("backend")}/top-gainers-and-losers`,
+      {
+        params: {
+          n: 5,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching top gainers losers:", error);
-    throw error;  
+    throw error;
   }
-}
+};
 
-export { getStockData, register, login, getServerUrl, getUserDetails, getNameInitials, getChatbotResponse, getImage, getCompanyInfo, getTopGainersLosers };
+export {
+  getStockData,
+  register,
+  login,
+  getServerUrl,
+  getUserDetails,
+  getNameInitials,
+  getChatbotResponse,
+  getImage,
+  getCompanyInfo,
+  getTopGainersLosers,
+};

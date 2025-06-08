@@ -43,24 +43,26 @@ export default function StockChart({
   chartType = 'line',
 }: StockChartProps) {
   // Prepare data for the chart
-  const chartData = stockData?.actualData ? stockData.actualData.map((item, index) => {
-    const predictionPoint = stockData?.predictedData?.[index - stockData?.actualData.length + stockData?.predictedData?.length];
-    
-    return {
+  let chartData: { date: string; actual: number | null; predicted: number | null }[] = [];
+  if (stockData?.actualData?.length) {
+    chartData = stockData.actualData.map((item) => ({
       date: item["Date"],
       actual: item["Close"],
-      predicted: predictionPoint ? predictionPoint["Close"] : null
-    };
-  }) : [];
-  
-  // Add prediction-only data points
+      predicted: null,
+    }));
+  }
+  // Merge prediction points with existing dates (to avoid a gap) or append new ones
   if (stockData?.predictedData?.length) {
-    stockData.predictedData.slice(0).forEach(point => {
-      if (!chartData.find(dataPoint => dataPoint.date === point["Date"])) {
+    stockData.predictedData.forEach((point) => {
+      const existing = chartData.find((d) => d.date === point["Date"]);
+      if (existing) {
+        // If the date already exists (e.g. last actual day), just attach the prediction
+        existing.predicted = point["Close"];
+      } else {
         chartData.push({
           date: point["Date"],
-          actual: 0,
-          predicted: point["Close"]
+          actual: null,
+          predicted: point["Close"],
         });
       }
     });
@@ -210,9 +212,9 @@ export default function StockChart({
                     type="monotone" 
                     dataKey="predicted" 
                     name="predicted"
-                    stroke="hsl(var(--success))" 
+                    stroke={stockData?.predictionColor}
                     fillOpacity={0.5}
-                    fill="url(#colorPredicted)" 
+                    fill={stockData?.predictionColor}
                     strokeWidth={2}
                     strokeDasharray="5 5"
                   />
