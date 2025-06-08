@@ -5,6 +5,14 @@ import { useMobile } from '@/hooks/use-mobile';
 import { BarChart3, BarChart4, Newspaper, ChevronLeft, ChevronRight, LayoutDashboard, TrendingUp, MessageSquare, Bot } from 'lucide-react';
 import {getNameInitials} from '@/lib/utilityFunctions';
 import Logo from '@/assets/Logo.png';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -13,8 +21,13 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ collapsed, setCollapsed, userData }: SidebarProps) {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const isMobile = useMobile();
+
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    setLocation("/login");
+  };
 
   const LinkItem = ({ href, text, Icon, disabled=false }: { href: string; text: string; Icon: React.ElementType; disabled?: boolean }) => {
     const isActive = location === href;
@@ -87,17 +100,32 @@ export default function Sidebar({ collapsed, setCollapsed, userData }: SidebarPr
           
           {/* User */}
           <div className="border-t border-gray-700 p-4">
-            <div className="flex items-center">
-              <span className='bg-green-800 rounded-full flex items-center justify-center p-2 font-bold'>
-                {getNameInitials(userData?.name || 'User')}
-              </span>
-              {!collapsed && (
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-white">{userData?.name}</p>
-                  <p className="text-xs text-gray-400">{userData?.email}</p>
-                </div>
-              )}
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="User menu">
+                  <span className='bg-green-800 rounded-full flex items-center justify-center p-2 font-bold'>
+                    {getNameInitials(userData?.name || 'User')}
+                  </span>
+                  {!collapsed && (
+                    <div className="ml-3 text-left">
+                      <p className="text-sm font-medium text-white">{userData?.name}</p>
+                      <p className="text-xs text-gray-400">{userData?.email}</p>
+                    </div>
+                  )}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-gradient-to-b from-blue-900/95 to-indigo-900/95 border-blue-700">
+                <DropdownMenuLabel className="text-blue-200">My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-blue-700/50" />
+                <DropdownMenuItem className="text-blue-100 hover:bg-blue-800/50 focus:bg-blue-800/50">Profile</DropdownMenuItem>
+                <DropdownMenuItem className="text-blue-100 hover:bg-blue-800/50 focus:bg-blue-800/50">Settings</DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-blue-700/50" />
+                <DropdownMenuItem onClick={logout} className="text-rose-300 hover:text-rose-200 hover:bg-rose-900/30 focus:bg-rose-900/30">
+                  <ChevronLeft className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

@@ -94,29 +94,6 @@ export default function Navbar({ toggleSidebar, userData }: NavbarProps) {
           >
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button> */}
-          
-          <div className="relative">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="User menu">
-                  <span className='bg-green-800 rounded-full flex items-center justify-center p-2 font-bold'>
-                {getNameInitials(userData?.name || 'User')}
-              </span>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-gradient-to-b from-blue-900/95 to-indigo-900/95 border-blue-700">
-                <DropdownMenuLabel className="text-blue-200">My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-blue-700/50" />
-                <DropdownMenuItem className="text-blue-100 hover:bg-blue-800/50 focus:bg-blue-800/50">Profile</DropdownMenuItem>
-                <DropdownMenuItem className="text-blue-100 hover:bg-blue-800/50 focus:bg-blue-800/50">Settings</DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-blue-700/50" />
-                <DropdownMenuItem onClick={logout} className="text-rose-300 hover:text-rose-200 hover:bg-rose-900/30 focus:bg-rose-900/30">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
         </motion.div>
       </div>
     </header>
