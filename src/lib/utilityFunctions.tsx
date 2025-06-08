@@ -97,7 +97,7 @@ const getStockData = async (
       let dailyFactor = 1;
       if (companyInfoObject.prediction === "Buy") {
         dailyFactor = Math.pow(1.05, 1 / days); // Compound to 10% over 5 days
-      } else if (companyInfoObject.prediction === "Sell") {
+      } else if (companyInfoObject.prediction === "Sell" || companyInfoObject.prediction === "Underperform") {
         dailyFactor = Math.pow(0.90, 1 / days); // Compound to -10% over 5 days
       } else if (companyInfoObject.prediction === "Hold") {
         dailyFactor = 1;
@@ -122,7 +122,7 @@ const getStockData = async (
       actualData: actualData,
       predictedData: predictedData,
       companyInfo: companyInfo.data.data[0],
-      predictionColor: companyInfoObject.prediction === "Buy" ? "hsl(var(--success))" : companyInfoObject.prediction === "Hold" ? "#fcb103" : "hsl(var(--danger))",
+      predictionColor: companyInfoObject.prediction === "Buy" ? "hsl(var(--success))" : companyInfoObject.prediction === "Hold" ? "#fcb103" : "#a80000",
     };
     console.log(stockData);
     //   console.log(response.data.data);
@@ -135,6 +135,21 @@ const getStockData = async (
     };
   } finally {
     setIsLoading(false);
+  }
+};
+
+const getNews = async () => {
+  try {
+    const response = await axios.get(`${getServerUrl("backend")}/all-news`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching news:", error);
+    throw error;
   }
 };
 
@@ -276,4 +291,5 @@ export {
   getImage,
   getCompanyInfo,
   getTopGainersLosers,
+  getNews,
 };

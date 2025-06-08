@@ -86,7 +86,7 @@ export default function CompanyOverview({ ticker, companyInfo }: CompanyOverview
               href={companyInfo.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 underline text-sm"
+              className="text-link underline text-sm"
             >
               {companyInfo.website}
             </a>

@@ -1,18 +1,18 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Area, 
-  AreaChart, 
-  ResponsiveContainer, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  CartesianGrid 
-} from 'recharts';
-import { Card, CardContent } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { StockPrediction } from '@/data/stocks';
-import { formatCurrency } from '@/lib/utils';
+import React, { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { StockPrediction } from "@/data/stocks";
+import { formatCurrency } from "@/lib/utils";
 import {
   Chart,
   ChartCanvas,
@@ -25,26 +25,29 @@ import {
   discontinuousTimeScaleProvider,
   last,
   withDeviceRatio,
-} from 'react-financial-charts';
+} from "react-financial-charts";
 
 interface StockChartProps {
   stockData: StockPrediction;
   showPrediction: boolean;
   onTogglePrediction: (show: boolean) => void;
   isStockDataLoading?: boolean;
-  chartType?: 'line' | 'candlestick';
+  chartType?: "line" | "candlestick";
 }
 
-export default function StockChart({ 
-  stockData, 
-  showPrediction, 
+export default function StockChart({
+  stockData,
+  showPrediction,
   onTogglePrediction,
   isStockDataLoading = false,
-  chartType = 'line',
+  chartType = "line",
 }: StockChartProps) {
   // Prepare data for the chart
-  let chartData: { date: string; actual: number | null; predicted: number | null }[] = [];
-
+  let chartData: {
+    date: string;
+    actual: number | null;
+    predicted: number | null;
+  }[] = [];
 
   if (stockData?.actualData?.length) {
     chartData = stockData.actualData.map((item) => ({
@@ -69,40 +72,49 @@ export default function StockChart({
       }
     });
   }
-  
+
   // Custom tooltip component
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-card p-3 border border-border rounded-md shadow">
           <p className="text-sm font-medium">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            entry.value !== null && (
-              <p key={index} className="text-sm" style={{ color: entry.color }}>
-                {entry.name === 'actual' ? 'Actual: ' : 'Predicted: '}
-                {formatCurrency(entry.value)}
-              </p>
-            )
-          ))}
+          {payload.map(
+            (entry: any, index: number) =>
+              entry.value !== null && (
+                <p
+                  key={index}
+                  className="text-sm"
+                  style={{ color: entry.color }}
+                >
+                  {entry.name === "actual" ? "Actual: " : "Predicted: "}
+                  {formatCurrency(entry.value)}
+                </p>
+              )
+          )}
         </div>
       );
     }
     return null;
   };
 
-  if (chartType === 'candlestick') {
+  if (chartType === "candlestick") {
     // Prepare candlestick data: expects [{ date, open, high, low, close }]
-    const candleData = stockData?.actualData?.map((item: any) => ({
-      date: new Date(item.Date),
-      open: item.Open,
-      high: item.High,
-      low: item.Low,
-      close: item.Close,
-    })) || [];
+    const candleData =
+      stockData?.actualData?.map((item: any) => ({
+        date: new Date(item.Date),
+        open: item.Open,
+        high: item.High,
+        low: item.Low,
+        close: item.Close,
+      })) || [];
 
     // Setup scale provider
-    const scaleProvider = discontinuousTimeScaleProvider.inputDateAccessor((d: any) => d.date);
-    const { data, xScale, xAccessor, displayXAccessor } = scaleProvider(candleData);
+    const scaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(
+      (d: any) => d.date
+    );
+    const { data, xScale, xAccessor, displayXAccessor } =
+      scaleProvider(candleData);
     const start = xAccessor(last(data));
     const end = xAccessor(data[Math.max(0, data.length - 50)]);
     const xExtents = [end, start];
@@ -111,7 +123,7 @@ export default function StockChart({
       <Card className="bg-card border-border">
         <CardContent className="p-5">
           <div className="h-[350px] w-full">
-            <div style={{ width: '100%', height: '100%' }}>
+            <div style={{ width: "100%", height: "100%" }}>
               <ChartCanvas
                 height={350}
                 width={window.innerWidth - 380}
@@ -125,20 +137,19 @@ export default function StockChart({
                 xExtents={xExtents}
               >
                 <Chart id={1} yExtents={(d: any) => [d.high, d.low]}>
-                  <FinancialXAxis
-                    showGridLines
-                    tickLabelFill='#ffffff'
-                  />
+                  <FinancialXAxis showGridLines tickLabelFill="#ffffff" />
                   <FinancialYAxis
                     showGridLines
                     tickLabelFill="#ffffff"
-                    tickFormat={value => `₹${value}`}
+                    tickFormat={(value) => `₹${value}`}
                     orient="right"
                   />
                   <CandlestickSeries
-                    stroke={d => d.close > d.open ? '#16a34a' : '#dc2626'}
-                    wickStroke={d => d.close > d.open ? '#16a34a' : '#dc2626'}
-                    fill={d => d.close > d.open ? '#16a34a' : '#dc2626'}
+                    stroke={(d) => (d.close > d.open ? "#16a34a" : "#dc2626")}
+                    wickStroke={(d) =>
+                      d.close > d.open ? "#16a34a" : "#dc2626"
+                    }
+                    fill={(d) => (d.close > d.open ? "#16a34a" : "#dc2626")}
                   />
                   <MouseCoordinateX
                     displayFormat={(d: Date) => d.toLocaleDateString()}
@@ -176,43 +187,68 @@ export default function StockChart({
               >
                 <defs>
                   <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
+                    <stop
+                      offset="5%"
+                      stopColor="hsl(var(--primary))"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="hsl(var(--primary))"
+                      stopOpacity={0.1}
+                    />
                   </linearGradient>
-                  <linearGradient id="colorPredicted" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0.1} />
+                  <linearGradient
+                    id="colorPredicted"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor="hsl(var(--success))"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="hsl(var(--success))"
+                      stopOpacity={0.1}
+                    />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-                  tickLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                  axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255, 255, 255, 0.1)"
                 />
-                <YAxis 
-                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-                  tickLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                  axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                  tickLine={{ stroke: "hsl(var(--muted-foreground))" }}
+                  axisLine={{ stroke: "hsl(var(--muted-foreground))" }}
+                />
+                <YAxis
+                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                  tickLine={{ stroke: "hsl(var(--muted-foreground))" }}
+                  axisLine={{ stroke: "hsl(var(--muted-foreground))" }}
                   tickFormatter={(value) => `₹${value}`}
-                  domain={['auto', 'auto']}
+                  domain={["auto", "auto"]}
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Area 
-                  type="monotone" 
-                  dataKey="actual" 
+                <Area
+                  type="monotone"
+                  dataKey="actual"
                   name="actual"
-                  stroke="hsl(var(--primary))" 
+                  stroke="hsl(var(--primary))"
                   fillOpacity={1}
-                  fill="url(#colorActual)" 
+                  fill="url(#colorActual)"
                   strokeWidth={2}
                   activeDot={{ r: 6 }}
                 />
                 {showPrediction && (
-                  <Area 
-                    type="monotone" 
-                    dataKey="predicted" 
+                  <Area
+                    type="monotone"
+                    dataKey="predicted"
                     name="predicted"
                     stroke={stockData?.predictionColor}
                     fillOpacity={0.5}
@@ -224,23 +260,39 @@ export default function StockChart({
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          
+
           {/* Prediction Toggle */}
-          <div className="mt-4 flex justify-end items-center space-x-4">
+          <div className="mt-4 flex justify-between items-center space-x-4">
+            <div className="flex items-center space-x-2">
+
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-primary rounded-full"></div>
-              <span className="text-sm text-muted-foreground">Actual Price</span>
+              <span className="text-sm text-muted-foreground">
+                Actual Price
+              </span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-success rounded-full"></div>
-              <span className="text-sm text-muted-foreground">Predicted Price</span>
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: stockData?.predictionColor }}
+                ></div>
+              <span className="text-sm text-muted-foreground">
+                Predicted Price
+              </span>
             </div>
-            <div className="flex items-center space-x-2">
+                </div>
+            {/* <div className="flex items-center space-x-2">
               <span className="text-sm text-muted-foreground">Show Prediction</span>
               <Checkbox 
                 checked={showPrediction}
                 onCheckedChange={(checked) => onTogglePrediction(checked as boolean)}
               />
+            </div> */}
+            <div className="flex items-center text-muted-foreground space-x-2">
+              Prediction:{" "}
+              <span className="ml-2 text-sm font-bold text-muted-foreground" style={{ color: stockData?.predictionColor }}>
+                {stockData?.companyInfo?.prediction}
+              </span>
             </div>
           </div>
         </CardContent>
